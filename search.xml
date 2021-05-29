@@ -562,4 +562,210 @@
         <tag>C++</tag>
       </tags>
   </entry>
+  <entry>
+    <title>JSON库学习：1.启程</title>
+    <url>/2021/05/29/JSON%E5%BA%93%E5%AD%A6%E4%B9%A0%EF%BC%9A1-%E5%90%AF%E7%A8%8B/</url>
+    <content><![CDATA[<p><em>本系列仅为本人对此开源库的学习过程记录。知乎专栏点击<a href="https://zhuanlan.zhihu.com/json-tutorial">此处</a>！</em></p>
+<h2 id="JSON介绍"><a href="#JSON介绍" class="headerlink" title="JSON介绍"></a>JSON介绍</h2><p>一个JSON格式的文本示例如下：</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">&quot;title&quot;</span>: <span class="string">&quot;Design Patterns&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;subtitle&quot;</span>: <span class="string">&quot;Elements of Reusable Object-Oriented Software&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;author&quot;</span>: [</span><br><span class="line">        <span class="string">&quot;Erich Gamma&quot;</span>,</span><br><span class="line">        <span class="string">&quot;Richard Helm&quot;</span>,</span><br><span class="line">        <span class="string">&quot;Ralph Johnson&quot;</span>,</span><br><span class="line">        <span class="string">&quot;John Vlissides&quot;</span></span><br><span class="line">    ],</span><br><span class="line">    <span class="attr">&quot;year&quot;</span>: <span class="number">2009</span>,</span><br><span class="line">    <span class="attr">&quot;weight&quot;</span>: <span class="number">1.8</span>,</span><br><span class="line">    <span class="attr">&quot;hardcover&quot;</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="attr">&quot;publisher&quot;</span>: &#123;</span><br><span class="line">        <span class="attr">&quot;Company&quot;</span>: <span class="string">&quot;Pearson Education&quot;</span>,</span><br><span class="line">        <span class="attr">&quot;Country&quot;</span>: <span class="string">&quot;India&quot;</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">&quot;website&quot;</span>: <span class="literal">null</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>实际上JSON是树状结构，且只包含这6种数据类型：</p>
+<ul>
+<li>null: 表示为 null</li>
+<li>boolean: 表示为 true 或 false</li>
+<li>number: 一般的浮点数表示方式，在下一单元详细说明</li>
+<li>string: 表示为 “…”</li>
+<li>array: 表示为 [ … ]</li>
+<li>object: 表示为 { … }</li>
+</ul>
+<p>实现一个JSON库主要是完成3个任务：</p>
+<ol>
+<li>把 JSON 文本解析为一个树状数据结构（parse）。</li>
+<li>提供接口访问该数据结构（access）。</li>
+<li>把数据结构转换成 JSON 文本（stringify）。</li>
+</ol>
+<p><img src="https://i.loli.net/2021/05/29/9xHP3TUNXCI4QpZ.png" alt="json库过程"></p>
+<p>本章将完成null和boolean的解析。</p>
+<h2 id="头文件与API设计"><a href="#头文件与API设计" class="headerlink" title="头文件与API设计"></a>头文件与API设计</h2><p>这一节的设计都在leptjson.h头文件中进行。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="keyword">enum</span></span><br><span class="line">&#123;</span><br><span class="line">  LEPT_NULL,</span><br><span class="line">  LEPT_FALSE,</span><br><span class="line">  LEPT_TRUE,</span><br><span class="line">  LEPT_NUMBER,</span><br><span class="line">  LEPT_STRING,</span><br><span class="line">  LEPT_ARRAY,</span><br><span class="line">  LEPT_OBJECT</span><br><span class="line">&#125; lept_type;</span><br></pre></td></tr></table></figure>
+
+<p>上述枚举类型定义了JSON的6种<strong>数据类型</strong>，其中true和false分了两个。</p>
+<p>下面是JSON的<strong>数据结构</strong>。这是一个树形结构，所以最终要形成一个树的数据结构，其中每个节点用下面的结构体表示，称其为一个JSON值(JSON value)。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">  lept_type type;</span><br><span class="line">&#125; lept_value;</span><br></pre></td></tr></table></figure>
+
+<p>然后是两个<strong>API函数</strong>。一个是解析JSON：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">lept_parse</span><span class="params">(lept_value *v, <span class="keyword">const</span> <span class="keyword">char</span> *json)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>parse是解析的意思。这个函数的一般用法应该是：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">lept_value v; <span class="comment">// 变量v由使用者分配</span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">char</span> json[] = ...; <span class="comment">// json变量是传入的JSON文本</span></span><br><span class="line"><span class="keyword">int</span> ret = lept_parse(&amp;v, json);</span><br></pre></td></tr></table></figure>
+
+<p>其返回值包括这几种类型(用来描述解析过程及结果的)：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">enum</span></span><br><span class="line">&#123;</span><br><span class="line">  LEPT_PARSE_OK = <span class="number">0</span>,</span><br><span class="line">  LEPT_PARSE_EXPECT_VALUE,</span><br><span class="line">  LEPT_PARSE_INVALID_VALUE,</span><br><span class="line">  LEPT_PARSE_ROOT_NOT_SINGULAR</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>第二个函数是访问结果的函数，就是获取其类型。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function">lept_type <span class="title">lept_get_type</span><span class="params">(<span class="keyword">const</span> lept_value* v)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<h2 id="JSON语法子集"><a href="#JSON语法子集" class="headerlink" title="JSON语法子集"></a>JSON语法子集</h2><p>本章只解析null和boolean，因此语法子集为：</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="built_in">JSON</span>-text = ws value ws</span><br><span class="line">ws = *(%x20 / %x09 / %x0A / %x0D)</span><br><span class="line">value = <span class="literal">null</span> / <span class="literal">false</span> / <span class="literal">true</span> </span><br><span class="line"><span class="literal">null</span>  = <span class="string">&quot;null&quot;</span></span><br><span class="line"><span class="literal">false</span> = <span class="string">&quot;false&quot;</span></span><br><span class="line"><span class="literal">true</span>  = <span class="string">&quot;true&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>JSON文本由三部分组成，第1、3部分是<code>ws</code>(ws即whitespace的缩写)，它表示空白(由零或多个空格符(space U+0020)、制表符(tab U+0009)、换行符(LF U+000A)、回车符(CR U+000D)所组成)。对于本章来说，<code>value</code>暂时只有<code>&quot;null&quot;</code>,<code>&quot;false&quot;</code>和<code>&quot;true&quot;</code>三种字面值。</p>
+<p>解析器需要判断输入是否是一个合法的JSON，若不符合需要对错误进行追踪。因此定义了3种错误码(在前面的enum中定义的)：</p>
+<ul>
+<li>若一个 JSON 只含有空白，传回 LEPT_PARSE_EXPECT_VALUE。</li>
+<li>若一个值之后，在空白之后还有其他字符，传回 LEPT_PARSE_ROOT_NOT_SINGULAR。</li>
+<li>若值不是那三种字面值，传回 LEPT_PARSE_INVALID_VALUE。</li>
+</ul>
+<h2 id="单元测试方法"><a href="#单元测试方法" class="headerlink" title="单元测试方法"></a>单元测试方法</h2><p><strong>代码的终极目标有两个，第一个是实现需求，第二个是提高代码质量和可维护性。</strong>单元测试的作用就是测试每一个函数的返回是否正确，提高代码可维护性。一般我们会采用自动的测试方式，例如单元测试(unit testing)。单元测试也能确保其他人修改代码后，原来的功能维持正确(这称为回归测试／regression testing)。</p>
+<p>一般来说，软件开发是以周期进行的。例如，加入一个功能，再写关于该功能的单元测试。但也有另一种软件开发方法论，称为测试驱动开发(test-driven development, TDD)，它的主要循环步骤是：</p>
+<ol>
+<li>加入一个测试；</li>
+<li>运行所有测试，新的测试应该会失败；</li>
+<li>编写实现代码；</li>
+<li>运行所有测试，若有测试失败回到3；</li>
+<li>重构代码；</li>
+<li>回到 1。</li>
+</ol>
+<p>TDD 是先写测试，再实现功能。好处是实现只会刚好满足测试，而不会写了一些不需要的代码，或是没有被测试的代码。</p>
+<p>但无论我们是采用 TDD，或是先实现后测试，都应尽量加入足够覆盖率的单元测试。</p>
+<p>此章节中单元测试框架在test.c中构建。最大的作用就是几个宏，其他的测试函数都是调用的这些宏。</p>
+<p>其中提供了一个宏：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> EXPECT_EQ_INT(expect, actual) EXPECT_EQ_BASE((expect) == (actual), expect, actual, <span class="meta-string">&quot;%d&quot;</span>)</span></span><br></pre></td></tr></table></figure>
+
+<p>其中又包含了另一个宏：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> EXPECT_EQ_BASE(equality, expect, actual, format)                                                     \</span></span><br><span class="line">  <span class="keyword">do</span>                                                                                                         \</span><br><span class="line">  &#123;                                                                                                          \</span><br><span class="line">    test_count++;                                                                                            \</span><br><span class="line">    <span class="keyword">if</span> (equality)                                                                                            \</span><br><span class="line">      test_pass++;                                                                                           \</span><br><span class="line">    <span class="keyword">else</span>                                                                                                     \</span><br><span class="line">    &#123;                                                                                                        \</span><br><span class="line">      <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">&quot;%s:%d: expect: &quot;</span> format <span class="string">&quot; actual: &quot;</span> format <span class="string">&quot;\n&quot;</span>, __FILE__, __LINE__, expect, actual); \</span><br><span class="line">      main_ret = <span class="number">1</span>;                                                                                          \</span><br><span class="line">    &#125;                                                                                                        \</span><br><span class="line">  &#125; <span class="keyword">while</span> (<span class="number">0</span>)</span><br></pre></td></tr></table></figure>
+
+<p>先解释一下这个宏，在宏定义中超过一行的，要用<code>\</code>接起来。然后把超过一行的内容放在<code>do &#123; ... &#125; while (0)</code>里面才能不出错。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">## 实现解析器</span><br><span class="line"></span><br><span class="line">上面已经实现了API设计、单元测试，接下来是设计解析器了。</span><br><span class="line"></span><br><span class="line">为了减少解析函数之间传递多个参数，我们把这些数据都放进一个 lept_context 结构体：</span><br><span class="line"></span><br><span class="line">&#96;&#96;&#96;c</span><br><span class="line">typedef struct</span><br><span class="line">&#123;</span><br><span class="line">  const char *json;</span><br><span class="line">&#125; lept_context;</span><br></pre></td></tr></table></figure>
+
+<p>然后是解析函数主入口：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/* 提示：这里应该是 JSON-text = ws value ws，*/</span></span><br><span class="line"><span class="comment">/* 以下实现没处理最后的 ws 和 LEPT_PARSE_ROOT_NOT_SINGULAR */</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">lept_parse</span><span class="params">(lept_value *v, <span class="keyword">const</span> <span class="keyword">char</span> *json)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  lept_context c;</span><br><span class="line">  assert(v != <span class="literal">NULL</span>);</span><br><span class="line">  c.json = json;</span><br><span class="line">  v-&gt;type = LEPT_NULL;</span><br><span class="line">  lept_parse_whitespace(&amp;c);</span><br><span class="line">  <span class="keyword">return</span> lept_parse_value(&amp;c, v);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>以上解析函数主入口只处理了JSON字符串当前位置，若后面还有则暂不处理。</p>
+<p>最终是调用了lept_parse_value，并返回解析结果。</p>
+<p>由于 JSON 语法特别简单，我们不需要写分词器(tokenizer)，只需检测下一个字符，便可以知道它是哪种类型的值，然后调用相关的分析函数。对于完整的 JSON 语法，跳过空白后，只需检测当前字符：</p>
+<ul>
+<li>n ➔ null</li>
+<li>t ➔ true</li>
+<li>f ➔ false</li>
+<li>“ ➔ string</li>
+<li>0-9/- ➔ number</li>
+<li>[ ➔ array</li>
+<li>{ ➔ object</li>
+</ul>
+<p>因此可以利用这个宏实现解析函数：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> EXPECT(c, ch)         \</span></span><br><span class="line">  <span class="keyword">do</span>                          \</span><br><span class="line">  &#123;                           \</span><br><span class="line">    assert(*c-&gt;json == (ch)); \</span><br><span class="line">    c-&gt;json++;                \</span><br><span class="line">  &#125; <span class="keyword">while</span> (<span class="number">0</span>)</span><br></pre></td></tr></table></figure>
+
+<p>下面是解析<code>ws</code>所代表的“空”(由于此函数不会出错，因此返回值为void)：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/* ws = *(%x20 / %x09 / %x0A / %x0D) */</span></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">lept_parse_whitespace</span><span class="params">(lept_context *c)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">const</span> <span class="keyword">char</span> *p = c-&gt;json;</span><br><span class="line">  <span class="keyword">while</span> (*p == <span class="string">&#x27; &#x27;</span> || *p == <span class="string">&#x27;\t&#x27;</span> || *p == <span class="string">&#x27;\n&#x27;</span> || *p == <span class="string">&#x27;\r&#x27;</span>)</span><br><span class="line">    p++;</span><br><span class="line">  c-&gt;json = p;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>下面是解析null：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/* null  = &quot;null&quot; */</span></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">lept_parse_null</span><span class="params">(lept_context *c, lept_value *v)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  EXPECT(c, <span class="string">&#x27;n&#x27;</span>);</span><br><span class="line">  <span class="keyword">if</span> (c-&gt;json[<span class="number">0</span>] != <span class="string">&#x27;u&#x27;</span> || c-&gt;json[<span class="number">1</span>] != <span class="string">&#x27;l&#x27;</span> || c-&gt;json[<span class="number">2</span>] != <span class="string">&#x27;l&#x27;</span>)</span><br><span class="line">    <span class="keyword">return</span> LEPT_PARSE_INVALID_VALUE;</span><br><span class="line">  c-&gt;json += <span class="number">3</span>;</span><br><span class="line">  v-&gt;type = LEPT_NULL;</span><br><span class="line">  <span class="keyword">return</span> LEPT_PARSE_OK;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>然后是lept_parse_value函数：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/* value = null / false / true */</span></span><br><span class="line"><span class="comment">/* 提示：下面代码没处理 false / true，将会是练习之一 */</span></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">lept_parse_value</span><span class="params">(lept_context *c, lept_value *v)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">switch</span> (*c-&gt;json)</span><br><span class="line">  &#123;</span><br><span class="line">  <span class="keyword">case</span> <span class="string">&#x27;n&#x27;</span>:</span><br><span class="line">    <span class="keyword">return</span> lept_parse_null(c, v);</span><br><span class="line">  <span class="keyword">case</span> <span class="string">&#x27;\0&#x27;</span>:</span><br><span class="line">    <span class="keyword">return</span> LEPT_PARSE_EXPECT_VALUE;</span><br><span class="line">  <span class="keyword">default</span>:</span><br><span class="line">    <span class="keyword">return</span> LEPT_PARSE_INVALID_VALUE;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="练习题"><a href="#练习题" class="headerlink" title="练习题"></a>练习题</h2><ol>
+<li>修正关于 LEPT_PARSE_ROOT_NOT_SINGULAR 的单元测试，若 JSON在一个值之后，空白之后还有其它字符，则要返回 LEPT_PARSE_ROOT_NOT_SINGULAR。</li>
+<li>参考 test_parse_null()，加入 test_parse_true()、test_parse_false() 单元测试。</li>
+<li>参考 lept_parse_null() 的实现和调用方，解析 true 和 false 值。</li>
+</ol>
+<h2 id="解决练习题"><a href="#解决练习题" class="headerlink" title="解决练习题"></a>解决练习题</h2><h3 id="修正LEPT-PARSE-ROOT-NOT-SINGULAR"><a href="#修正LEPT-PARSE-ROOT-NOT-SINGULAR" class="headerlink" title="修正LEPT_PARSE_ROOT_NOT_SINGULAR"></a>修正LEPT_PARSE_ROOT_NOT_SINGULAR</h3><p>由于JSON文本本有三部分<code>JSON-text = ws value ws</code>，但之前只解析了前两部分，最后的<code>ws</code>并没有处理。因此修改解析函数主入口：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">lept_parse</span><span class="params">(lept_value *v, <span class="keyword">const</span> <span class="keyword">char</span> *json)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  lept_context c;</span><br><span class="line">  <span class="keyword">int</span> ret;</span><br><span class="line">  assert(v != <span class="literal">NULL</span>);</span><br><span class="line">  c.json = json;</span><br><span class="line">  v-&gt;type = LEPT_NULL;</span><br><span class="line">  lept_parse_whitespace(&amp;c);</span><br><span class="line">  <span class="keyword">if</span> ((ret = lept_parse_value(&amp;c, v)) == LEPT_PARSE_OK)</span><br><span class="line">  &#123;</span><br><span class="line">    lept_parse_whitespace(&amp;c);</span><br><span class="line">    <span class="keyword">if</span> (*c.json != <span class="string">&#x27;\0&#x27;</span>)</span><br><span class="line">      ret = LEPT_PARSE_ROOT_NOT_SINGULAR;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> ret;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>增加了<code>value</code>的后续解析，若后面还有关键词，那么发出<code>LEPT_PARSE_ROOT_NOT_SINGULAR</code>的信号。</p>
+<h3 id="true-false单元测试"><a href="#true-false单元测试" class="headerlink" title="true/false单元测试"></a>true/false单元测试</h3><p>首先在<code>test_parse()</code>中添加<code>test_parse_true()</code>和<code>test_parse_false()</code>，这两个函数可参考<code>test_parse_null()</code></p>
+<p>的写法：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">test_parse_true</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  lept_value v;</span><br><span class="line">  v.type = LEPT_FALSE;</span><br><span class="line">  EXPECT_EQ_INT(LEPT_PARSE_OK, lept_parse(&amp;v, <span class="string">&quot;true&quot;</span>));</span><br><span class="line">  EXPECT_EQ_INT(LEPT_TRUE, lept_get_type(&amp;v));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">test_parse_false</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  lept_value v;</span><br><span class="line">  v.type = LEPT_TRUE;</span><br><span class="line">  EXPECT_EQ_INT(LEPT_PARSE_OK, lept_parse(&amp;v, <span class="string">&quot;false&quot;</span>));</span><br><span class="line">  EXPECT_EQ_INT(LEPT_FALSE, lept_get_type(&amp;v));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="true-false解析"><a href="#true-false解析" class="headerlink" title="true/false解析"></a>true/false解析</h3><p>在<code>lept_parse_value()</code>中添加<code>case &#39;t&#39;:  return lept_parse_true(c, v)</code>及<code>case &#39;f&#39;:  return lept_parse_false(c, v)</code>，然后参照<code>lept_parse_null()</code>写下面两个解析函数：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">lept_parse_true</span><span class="params">(lept_context *c, lept_value *v)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  EXPECT(c, <span class="string">&#x27;t&#x27;</span>);</span><br><span class="line">  <span class="keyword">if</span> (c-&gt;json[<span class="number">0</span>] != <span class="string">&#x27;r&#x27;</span> || c-&gt;json[<span class="number">1</span>] != <span class="string">&#x27;u&#x27;</span> || c-&gt;json[<span class="number">2</span>] != <span class="string">&#x27;e&#x27;</span>)</span><br><span class="line">    <span class="keyword">return</span> LEPT_PARSE_INVALID_VALUE;</span><br><span class="line">  c-&gt;json += <span class="number">3</span>;</span><br><span class="line">  v-&gt;type = LEPT_TRUE;</span><br><span class="line">  <span class="keyword">return</span> LEPT_PARSE_OK;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">lept_parse_false</span><span class="params">(lept_context *c, lept_value *v)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  EXPECT(c, <span class="string">&#x27;f&#x27;</span>);</span><br><span class="line">  <span class="keyword">if</span> (c-&gt;json[<span class="number">0</span>] != <span class="string">&#x27;a&#x27;</span> || c-&gt;json[<span class="number">1</span>] != <span class="string">&#x27;l&#x27;</span> || c-&gt;json[<span class="number">2</span>] != <span class="string">&#x27;s&#x27;</span> || c-&gt;json[<span class="number">3</span>] != <span class="string">&#x27;e&#x27;</span>)</span><br><span class="line">    <span class="keyword">return</span> LEPT_PARSE_INVALID_VALUE;</span><br><span class="line">  c-&gt;json += <span class="number">4</span>;</span><br><span class="line">  v-&gt;type = LEPT_FALSE;</span><br><span class="line">  <span class="keyword">return</span> LEPT_PARSE_OK;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>第一章介绍了JSON文本的基本格式，然后先设计了JSON的6种数据类型，JSON的基本数据结构，解析JSON和获取JSON数据类型的API，并规定了解析JSON的返回值类型。然后再从JSON的语法子集出发来分析解析JSON的方法。中途穿插了单元测试知识的介绍。然后到了实现解析器部分，根据JSON的语法子集规则依次设计了针对每个JSON数据类型的解析模块。</p>
+]]></content>
+      <categories>
+        <category>笔记</category>
+      </categories>
+      <tags>
+        <tag>C</tag>
+        <tag>开源项目</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>const 相关总结</title>
+    <url>/2021/05/29/const%20%E7%9B%B8%E5%85%B3%E6%80%BB%E7%BB%93/</url>
+    <content><![CDATA[<p><em>const 在 C++ 中的应用非常广泛，但 const 除了最基本的修饰变量是“不可更新”的功能外，还常与指针、引用或与函数结合。后者会使分析变得很棘手。</em></p>
+<h2 id="const限定符"><a href="#const限定符" class="headerlink" title="const限定符"></a>const限定符</h2><p>最初提到 const 是因为我们想要这样一种变量，这种变量被初始化后其值就不会发生变化了，因此有了 const。默认状态下， const 对象仅在文件内有效(参考自Primer，P54)，如果这样的变量想在其他文件使用，需要在定义它之前用 extern 做声明。还有要注意 const 必须被初始化(关于这句话要灵活理解，在一个 const 类成员可以不在声明时初始化，可以放在构造函数里初始化)。</p>
+<h3 id="与-define-的区别"><a href="#与-define-的区别" class="headerlink" title="与 #define 的区别"></a>与 #define 的区别</h3><p>C 语言中常见 #define 定义“常量”，在 C++ 中最好使用 const 替换之。使用 #define 时，由于直接是字符的替换，不会进行类型的检查，可能会产生一些问题。而 const 在编译时就分配了内存，规定了类型，且只分配一次内存，不像 #define 那样会重复拷贝。</p>
+<h3 id="与常量的区别"><a href="#与常量的区别" class="headerlink" title="与常量的区别"></a>与常量的区别</h3><p>为什么前一部分的“常量”有个引号呢？因为 const 不代表真正的常量，而是“不能更新”的量。在 C++ 中，常量表达式值不会改变且编译过程即可知结果的表达式，详见 constexpr 和常量表达式。</p>
+<h2 id="const与引用"><a href="#const与引用" class="headerlink" title="const与引用"></a>const与引用</h2><p>const 修饰的引用称为<strong>对常量的引用</strong>(reference to const)，且要注意这样的引用不能修改它所绑定的对象。</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> ci = <span class="number">1024</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> %r1 = ci; <span class="comment">// 正确：引用及其对应的对象都是常量</span></span><br><span class="line">r1 = <span class="number">42</span>;            <span class="comment">// 错误：r1是对常量的引用</span></span><br><span class="line"><span class="keyword">int</span> &amp;r2 = ci;       <span class="comment">// 错误：试图让一个非常量引用指向一个常量对象</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h3><p>众所周知，引用的类型需要与所引用的对象的类型一致，但在初始化 const 引用时可以允许任意表达式做初始值，只要这个表达式的类型能转换成 const 修饰的类型即可，可以看这个例子：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">double</span> dval = <span class="number">3.14</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> &amp;ri = dval;</span><br></pre></td></tr></table></figure>
+
+<p>先说明，上面的操作是没有问题的。实际上编译器产生了一个临时对象来解决这个问题：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> temp = dval; <span class="comment">// 包含了类型转换</span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> &amp;ri = temp;  <span class="comment">// ri实际上是绑定的这个临时量</span></span><br></pre></td></tr></table></figure>
+
+<p>注意啦，当<code>ri</code>非 const 时，如果还将<code>ri</code>引用绑定在<code>dval</code>上，即下面这样操作的话：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">double</span> dval = <span class="number">3.14</span>;</span><br><span class="line"><span class="keyword">int</span> &amp;ri = dval;</span><br></pre></td></tr></table></figure>
+
+<p>使用g++编译时会报错：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">error: cannot bind non-const lvalue reference of type ‘int&amp;’ to an rvalue of type ‘int’</span><br></pre></td></tr></table></figure>
+
+<p>也就是说，错误出在，不能将左值的引用绑定在右值(由临时量产生)上，而 const 的左值就可以。</p>
+<h3 id="const的引用不一定是const的对象"><a href="#const的引用不一定是const的对象" class="headerlink" title="const的引用不一定是const的对象"></a>const的引用不一定是const的对象</h3><p>并不是 const 引用所绑定的对象就 const 的。</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> i = <span class="number">42</span>;</span><br><span class="line"><span class="keyword">int</span> &amp;r1 = i;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> &amp;r2 = i;</span><br><span class="line">r1 = <span class="number">0</span>;            <span class="comment">// 正确：因为r1不是const的</span></span><br><span class="line">r2 = <span class="number">0</span>;            <span class="comment">// 错误：因为r2是const的</span></span><br></pre></td></tr></table></figure>
+
+<p>对与 const 的引用，注意 const 修饰的是引用的量，表示不能通过这个引用的量来改变这个被引用的量。const 和指针搭配时其实也是类似的道理。</p>
+<h2 id="const与指针"><a href="#const与指针" class="headerlink" title="const与指针"></a>const与指针</h2><p>const 与指针主要有以下几种组合情况：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">/*类型1*/</span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">char</span> *a;</span><br><span class="line"><span class="keyword">char</span> <span class="keyword">const</span> *a;</span><br><span class="line"><span class="comment">/*类型2*/</span></span><br><span class="line"><span class="keyword">char</span> *<span class="keyword">const</span> a;</span><br><span class="line"><span class="comment">/*类型3*/</span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">char</span> *<span class="keyword">const</span> a;</span><br></pre></td></tr></table></figure>
+
+<p>首先注意，可以将<code>char</code>这个类型看作是“透明”的，因此类型1中的 const 修饰的是<code>*a</code>，所以指的是指针所指向的量是 const 的，不能通过<code>*a</code>来修改值。类型2中的 const 修饰的是<code>a</code>，所以指的是这个指针是 const 的，不能修改<code>a</code>的值。而类型3就是类型1和2的组合，指的是指针也是 const 的，指针指向的对象也是 const 的。</p>
+<p>注意类型2实际上<code>a</code>被称作常指针，它在定义时必须被初始化。</p>
+<h3 id="顶层const"><a href="#顶层const" class="headerlink" title="顶层const"></a>顶层const</h3><p>顶层 const 表示指针本身是个常量，而底层 const 表示指针所指的对象是一个常量(大概是把指针看作一个由上到下的结构，所以才有顶层和底层之分)。实际上这个概念可以扩散到其他对象，顶层 const 可表示该对象是常量，而底层 const 这一概念只存在于指针和引用这些类型中。</p>
+<p>可以判断，类型1是底层 const，类型2是顶层 const，而类型3中第一个 const 是底层的，第二个 const 是顶层的。</p>
+<p>判断这个的作用在于：顶层对象拷贝时，没有什么影响。当具有底层 const 属性的量对象参与拷贝时，要注意拷入和拷出的对象需要有相同的底层 const 资格，或者两种数据类型能转换。</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> i;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> *<span class="keyword">const</span> p1 = &amp;i;</span><br><span class="line"><span class="keyword">int</span> *p2 = p1;       <span class="comment">// 错误：p1包含底层const定义，而p2没有</span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> *p3 = p1; <span class="comment">// 正确：p3和p1同样具有底层const的定义</span></span><br></pre></td></tr></table></figure>
+
+<p>我的简单理解是，底层 const 就是为了保证不能通过指针或引用修改指向的对象，所以拷贝需要底层 const 资格相同。而顶层 const 在拷贝时是无关紧要的，因为你通过p3也改变不了p1的指向。</p>
+<h2 id="const与函数"><a href="#const与函数" class="headerlink" title="const与函数"></a>const与函数</h2><h3 id="const修饰返回值"><a href="#const修饰返回值" class="headerlink" title="const修饰返回值"></a>const修饰返回值</h3><p>其含义与一般的修饰变量的含义相同。可以看这样一个例子：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Rational</span> &#123;</span> ... &#125;;</span><br><span class="line"><span class="keyword">const</span> Rational <span class="keyword">operator</span>* (<span class="keyword">const</span> Rational&amp; lhs, <span class="keyword">const</span> Rational rhs);</span><br></pre></td></tr></table></figure>
+
+<p>对于这样的一个操作符重载函数，返回一个 const 值可以避免下面这样的情况：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">Rational a, b, c;</span><br><span class="line">(a * b) = c;</span><br></pre></td></tr></table></figure>
+
+<p>很明显我们不希望上面的情况发生，让其返回一个 const 便可以避免发生。</p>
+<h3 id="const成员函数"><a href="#const成员函数" class="headerlink" title="const成员函数"></a>const成员函数</h3><p>用 const 修饰成员函数( const 加载函数定义和声明的函数名后面)，可以当作是给程序员看的，说明这个函数不可改动成员数据变量，更重要的，它使得操作 const 对象成为可能。前面这句话的后面部分怎么理解？翻译翻译就是，对于 const 对象，它只能调用其 const 成员函数，而不能调用其 non-const 函数。</p>
+<p>继续翻译，修饰成员函数为 const ，即将这个成员函数的<code>this</code>指针定义为 const 的(相当于函数有一隐形参数<code>const 类型 *const this</code>)(见参考1第231页)。如果没有这个 const 修饰，这一隐形参数为<code>类型 *const this</code>(只有顶层 const )。而调用函数的过程实际上有一个形参拷贝实参的过程。如果是一个 const 对象，它的指针应该是<code>const 类型 *const 对象名</code>，调用 const 成员函数时形参与实参的底层 const 相同。但调用 non-const 成员函数时，形参没有底层 const ，而实参有，因此会拷贝失败。</p>
+<ul>
+<li><p>小实验</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  A(<span class="keyword">int</span> num = <span class="number">0</span>) : num(num) &#123;&#125;</span><br><span class="line">  <span class="function"><span class="keyword">void</span> <span class="title">setNum</span><span class="params">(<span class="keyword">int</span> a)</span> </span>&#123; num = a; &#125;</span><br><span class="line">  <span class="function"><span class="keyword">int</span> <span class="title">getNum</span><span class="params">()</span> <span class="keyword">const</span> </span>&#123; <span class="keyword">return</span> num; &#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">  <span class="keyword">int</span> num;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>如此一个类A，正常我们是这样使用的：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function">A <span class="title">a</span><span class="params">(<span class="number">2</span>)</span></span>;</span><br><span class="line">a.setNum(<span class="number">3</span>);</span><br><span class="line"><span class="built_in">cout</span> &lt;&lt; a.getNum() &lt;&lt; <span class="built_in">endl</span>;</span><br></pre></td></tr></table></figure>
+
+<p>这样我们会得到结果为3。当存在一个 const 引用时：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function">A <span class="title">a</span><span class="params">(<span class="number">2</span>)</span></span>;</span><br><span class="line"><span class="keyword">const</span> A &amp;aRefer = a;</span><br><span class="line">aRefer.setNum(<span class="number">3</span>);</span><br><span class="line"><span class="built_in">cout</span> &lt;&lt; aRefer.getNum() &lt;&lt; <span class="built_in">endl</span>;</span><br></pre></td></tr></table></figure>
+
+<p>这样是跑不通的，报错为<code>error: passing ‘const A’ as ‘this’ argument discards qualifiers [-fpermissive]</code>。问题出在<code>aRefer.setNum(3)</code>，const 对象不能调用 non-const 成员函数，因为这样的话在拷贝参数时形参不具有底层 const ，而实参具有底层 const。</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function">A <span class="title">a</span><span class="params">(<span class="number">2</span>)</span></span>;</span><br><span class="line"><span class="keyword">const</span> A &amp;aRefer = a;</span><br><span class="line">a.setNum(<span class="number">3</span>);</span><br><span class="line"><span class="built_in">cout</span> &lt;&lt; aRefer.getNum() &lt;&lt; <span class="built_in">endl</span>;</span><br></pre></td></tr></table></figure>
+
+<p>而上面这种是可行的。</p>
+</li>
+</ul>
+<h3 id="const修饰形参"><a href="#const修饰形参" class="headerlink" title="const修饰形参"></a>const修饰形参</h3><p>实际上上一部分已经说明了一部分内容了。如果形参中的 const 是顶层 const，那是没有意义的。阅读过 Effective C++ 都会知道，作者提倡以引用的方式传递参数值，当不希望函数修改实参时，我们需要用 const 修饰形参。也有人说诸如 int 或 char 这类型的参数本来拷贝就没有多慢，所以不用传递引用的形式。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>const 最简单的作用是修饰变量是不可变的，当与引用或指针结合时会产生顶层和底层 const 的问题(拷贝时需要考虑)，实际上 const 在函数中应用时也是由于拷贝产生的这些问题。反正记住顶层和底层 const 的最终作用就是保证不能通过指针或引用去改变一个原本是 const 的量。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ol>
+<li>Primer C++ 第五版</li>
+<li>[const那些事](<a href="https://light-city.club/sc/basic_content/const/">const那些事 - C++那些事 (light-city.club)</a>)</li>
+<li>Effective C++ 第三版</li>
+</ol>
+]]></content>
+      <categories>
+        <category>学习</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+      </tags>
+  </entry>
 </search>
