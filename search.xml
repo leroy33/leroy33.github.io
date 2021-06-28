@@ -1,6 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>C++ 学习路线</title>
+    <url>/2020/11/24/C++%20%E5%AD%A6%E4%B9%A0%E8%B7%AF%E7%BA%BF/</url>
+    <content><![CDATA[<p><em>本文总结自网络上各文章段落，未经实践，仅具有参考意义。</em></p>
+<h1 id="编程基础-公共部分"><a href="#编程基础-公共部分" class="headerlink" title="编程基础(公共部分)"></a>编程基础(公共部分)</h1><p>数据结构和算法、计算机网络、操作系统和设计模式。</p>
+<h1 id="C-基础"><a href="#C-基础" class="headerlink" title="C++ 基础"></a>C++ 基础</h1><ul>
+<li>基本概念</li>
+<li>关键词</li>
+<li>预处理器</li>
+<li>表达式</li>
+<li>声明</li>
+<li>初始化</li>
+<li>函数</li>
+<li>语句</li>
+<li>类</li>
+<li>重载</li>
+<li>模板</li>
+<li>异常</li>
+</ul>
+<h1 id="C-进阶"><a href="#C-进阶" class="headerlink" title="C++ 进阶"></a>C++ 进阶</h1><h1 id="参考链接："><a href="#参考链接：" class="headerlink" title="参考链接："></a>参考链接：</h1><ul>
+<li><a href="https://github.com/Light-City/CPlusPlusThings">CPlusPlusThings</a>-&gt;<a href="https://light-city.club/sc/">直通点</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/110374817">这才是你需要的C语言、C++学习路线！</a></li>
+<li><a href="https://zh.cppreference.com/w/cpp">C++ 参考手册</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>学习</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>C++ 中的声明与定义</title>
+    <url>/2021/06/28/C++%20%E4%B8%AD%E7%9A%84%E5%A3%B0%E6%98%8E%E4%B8%8E%E5%AE%9A%E4%B9%89/</url>
+    <content><![CDATA[<p><em>在总结static知识的时候，发现我对变量的声明与定义概念有一些模糊，于是也对这个知识进行了小结。</em></p>
+<h2 id="声明和定义的关系"><a href="#声明和定义的关系" class="headerlink" title="声明和定义的关系"></a>声明和定义的关系</h2><p>C++支持分离式编译，即程序可拆分为多个文件，每个文件可单独编译。有时候就需要在不同文件中使用别的文件内的代码，为此，C++将声明与定义区分开来。<strong>声明</strong>使得名字被程序所知，一个文件想要使用别的文件中定义的名字，那必须包含对此名字的声明。<strong>定义</strong>负责创建与名字关联的实体，分配内存空间也是在此时进行的(此时也可能给一个变量赋初值)。</p>
+<h2 id="变量的声明与定义"><a href="#变量的声明与定义" class="headerlink" title="变量的声明与定义"></a>变量的声明与定义</h2><p>对于变量来说，定义变量时也就声明了该变量。如<code>int j</code>，同时声明并定义了变量。</p>
+<p>而声明变量时不一定定义了变量，此时需要使用<code>extern</code>关键字限定，如<code>extern int i</code>，并不是定义，也没有重新分配内存空间。</p>
+<p>如果被<code>extern</code>关键字标记的变量同时被赋初值，那么也就抵消掉了<code>extern</code>的作用，此时仅为定义而非声明了，如<code>extern double pi = 3.14</code>。</p>
+<p>一个变量永远只能有一次定义，但可以声明多次。在变量被使用之前，必须保证变量已被定义，并在该文件内有声明。</p>
+<h2 id="函数的声明与定义"><a href="#函数的声明与定义" class="headerlink" title="函数的声明与定义"></a>函数的声明与定义</h2><p>函数的声明与定义不是那么复杂，只有函数头，而没有函数体的就是函数声明，有没有<code>extern</code>限定都没关系，如<code>int fun()</code>或<code>extern int fun()</code>。</p>
+<p>函数定义即带上函数体，如<code>int fun() &#123; return 0; &#125;</code>。</p>
+<p>通常函数的声明在<code>.h</code>文件中，函数的定义在<code>.c</code>或<code>.cpp</code>文件中。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li>《C++ Primer 5th Edition》P41</li>
+</ul>
+]]></content>
+      <categories>
+        <category>学习</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>JSON库学习：1.启程</title>
     <url>/2021/05/29/JSON%E5%BA%93%E5%AD%A6%E4%B9%A0%EF%BC%9A1-%E5%90%AF%E7%A8%8B/</url>
     <content><![CDATA[<p><em>本系列仅为本人对此开源库的学习过程记录。知乎专栏点击<a href="https://zhuanlan.zhihu.com/json-tutorial">此处</a>！</em></p>
@@ -236,38 +291,6 @@
       </tags>
   </entry>
   <entry>
-    <title>C++ 学习路线</title>
-    <url>/2020/11/24/C++%20%E5%AD%A6%E4%B9%A0%E8%B7%AF%E7%BA%BF/</url>
-    <content><![CDATA[<p><em>本文总结自网络上各文章段落，未经实践，仅具有参考意义。</em></p>
-<h1 id="编程基础-公共部分"><a href="#编程基础-公共部分" class="headerlink" title="编程基础(公共部分)"></a>编程基础(公共部分)</h1><p>数据结构和算法、计算机网络、操作系统和设计模式。</p>
-<h1 id="C-基础"><a href="#C-基础" class="headerlink" title="C++ 基础"></a>C++ 基础</h1><ul>
-<li>基本概念</li>
-<li>关键词</li>
-<li>预处理器</li>
-<li>表达式</li>
-<li>声明</li>
-<li>初始化</li>
-<li>函数</li>
-<li>语句</li>
-<li>类</li>
-<li>重载</li>
-<li>模板</li>
-<li>异常</li>
-</ul>
-<h1 id="C-进阶"><a href="#C-进阶" class="headerlink" title="C++ 进阶"></a>C++ 进阶</h1><h1 id="参考链接："><a href="#参考链接：" class="headerlink" title="参考链接："></a>参考链接：</h1><ul>
-<li><a href="https://github.com/Light-City/CPlusPlusThings">CPlusPlusThings</a>-&gt;<a href="https://light-city.club/sc/">直通点</a></li>
-<li><a href="https://zhuanlan.zhihu.com/p/110374817">这才是你需要的C语言、C++学习路线！</a></li>
-<li><a href="https://zh.cppreference.com/w/cpp">C++ 参考手册</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>学习</category>
-      </categories>
-      <tags>
-        <tag>C++</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>JSON库学习：3-解析字符串</title>
     <url>/2021/06/06/JSON%E5%BA%93%E5%AD%A6%E4%B9%A0%EF%BC%9A3-%E8%A7%A3%E6%9E%90%E5%AD%97%E7%AC%A6%E4%B8%B2/</url>
     <content><![CDATA[<h2 id="JSON-字符串语法"><a href="#JSON-字符串语法" class="headerlink" title="JSON 字符串语法"></a>JSON 字符串语法</h2><p>JSON字符串，使用双引号括起来，且有反斜杠<code>\</code>作为转义符，和C语言挺像的。</p>
@@ -359,24 +382,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Hello World</title>
-    <url>/2020/09/20/hello-world/</url>
-    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
-]]></content>
-  </entry>
-  <entry>
     <title>JSON库学习：4.Unicode</title>
     <url>/2021/06/11/JSON%E5%BA%93%E5%AD%A6%E4%B9%A0%EF%BC%9A4.Unicode/</url>
     <content><![CDATA[<h2 id="Unicode"><a href="#Unicode" class="headerlink" title="Unicode"></a>Unicode</h2><p>上一章没有处理以<code>\u</code>开头的Unicode字符，可以<a href="http://json.la/">在线解析JSON</a>测试，输入<code>&#123;&quot;str&quot;:&quot;This is \u6549&quot;&#125;</code>，得到解析结果是<code>&#123;&quot;str&quot;:&quot;This is 敉&quot;&#125;</code>，因此我们的JSON库是有这种需求的。</p>
@@ -458,26 +463,6 @@
       </tags>
   </entry>
   <entry>
-    <title>杂记：太原</title>
-    <url>/2018/11/30/%E6%9D%82%E8%AE%B0%EF%BC%9A%E5%A4%AA%E5%8E%9F/</url>
-    <content><![CDATA[<p>前一段时间学院搞合唱，一般遇上这种事儿都没人自愿去的，按照惯例就按学号顺序安排人了。这一安排，我是必须得去了。于是就苦苦地花费了n个夜晚去练歌。期间有很多人都有没去过，我只有一次，因为乒乓比赛没去。终于到了今天啊，我们要结束这苦苦的训练了，最后去太原演出。</p>
-<p>中午刚吃完饭就急匆匆地赶到了学院，要化妆。什么？化妆？这对于我来说是绝望的。自从小学最后一次参加六一儿童节表演，我就从来没画过妆！不过还好是学院化妆技术最好的同学化的妆，还行，虽然这眉毛看起来真的很出戏……</p>
-<a id="more"></a>
-<p>于是我们乘车到了那个熟悉的地方，到了就彩排，于是先上去吼了两嗓子揪下来休息了。可是，中午不睡觉，真的很累啊(仅对于我来说)。哦对了，期间还发了“工作餐”，农夫三拳、面包和汪中汪HTC……</p>
-<p>最后的演出很成功，大家也很开心。后来在回学校的车上，看见太原的夜景，以前还真没注意过，太原的夜色挺美的。当时间安静下来的时候，我就喜欢瞎想。我意识到，原来我本科这几年都没怎么出过校门。一个原因是，校区确实是偏；另一个原因是，我本就不是很爱出去，特别是没人陪我一起的时候，更加理直气壮地待在学校了。大学生就是应该见多识广。如果我能回到大一，我肯定希望我自己能够多出去走走。但是就算回到大一，我多半还是不会经常出校门，因为其他的惰性因素没变，结果也不会变吧。</p>
-<p>在车走过的路线上，最喜欢的一个地方，太原美术馆、山西省图书馆、山西大剧院等场馆聚集的一个岛(算是吧)上。白天还觉得没什么，到晚上灯光打到剧院上，真的有一种停下车走进去的冲动。我感觉这次去太原，就像村里人进城一样，看见了太多的吸引我的东西。我经常与朋友讨论各个城市如何如何，又说道山西怎么怎么不行了，太原也不及其他的省会城市，可是没想到就算是太原，也有这么多东西吸引我去探索。我想，就算是学校这么偏，人的眼界也不能仅仅局限与一个“小地方”。就像是学校外面还有太原，太原外面还有华北，华北外面还有整个中国、亚洲甚至全世界。</p>
-<p>拓宽视野，说得太理想了，怎么做呢？没想法？那就看看身边那些优秀的人吧！我最近刚好在YouTube上看见一个在清华读书的马来西亚人，之前有人说什么外国人进北大清华比中国人更容易，不过看了视频我发现，人家本来就比大部分人优秀，凭什么不能去呢。</p>
-<p>时间也不早了，最后附上这位YouTuber的一个视频(他在B站也有账号)，准备去睡觉啦。</p>
-<iframe width="560" height="315" src="https://www.youtube.com/embed/uaZRsJ48xrU" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-]]></content>
-      <categories>
-        <category>我</category>
-      </categories>
-      <tags>
-        <tag>日常</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>const 相关总结</title>
     <url>/2021/05/29/const%20%E7%9B%B8%E5%85%B3%E6%80%BB%E7%BB%93/</url>
     <content><![CDATA[<p><em>const 在 C++ 中的应用非常广泛，但 const 除了最基本的修饰变量是“不可更新”的功能外，还常与指针、引用或与函数结合。后者会使分析变得很棘手。</em></p>
@@ -547,6 +532,94 @@
 <li>[const那些事](<a href="https://light-city.club/sc/basic_content/const/">const那些事 - C++那些事 (light-city.club)</a>)</li>
 <li>Effective C++ 第三版</li>
 </ol>
+]]></content>
+      <categories>
+        <category>学习</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Hello World</title>
+    <url>/2020/09/20/hello-world/</url>
+    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+]]></content>
+  </entry>
+  <entry>
+    <title>杂记：太原</title>
+    <url>/2018/11/30/%E6%9D%82%E8%AE%B0%EF%BC%9A%E5%A4%AA%E5%8E%9F/</url>
+    <content><![CDATA[<p>前一段时间学院搞合唱，一般遇上这种事儿都没人自愿去的，按照惯例就按学号顺序安排人了。这一安排，我是必须得去了。于是就苦苦地花费了n个夜晚去练歌。期间有很多人都有没去过，我只有一次，因为乒乓比赛没去。终于到了今天啊，我们要结束这苦苦的训练了，最后去太原演出。</p>
+<p>中午刚吃完饭就急匆匆地赶到了学院，要化妆。什么？化妆？这对于我来说是绝望的。自从小学最后一次参加六一儿童节表演，我就从来没画过妆！不过还好是学院化妆技术最好的同学化的妆，还行，虽然这眉毛看起来真的很出戏……</p>
+<a id="more"></a>
+<p>于是我们乘车到了那个熟悉的地方，到了就彩排，于是先上去吼了两嗓子揪下来休息了。可是，中午不睡觉，真的很累啊(仅对于我来说)。哦对了，期间还发了“工作餐”，农夫三拳、面包和汪中汪HTC……</p>
+<p>最后的演出很成功，大家也很开心。后来在回学校的车上，看见太原的夜景，以前还真没注意过，太原的夜色挺美的。当时间安静下来的时候，我就喜欢瞎想。我意识到，原来我本科这几年都没怎么出过校门。一个原因是，校区确实是偏；另一个原因是，我本就不是很爱出去，特别是没人陪我一起的时候，更加理直气壮地待在学校了。大学生就是应该见多识广。如果我能回到大一，我肯定希望我自己能够多出去走走。但是就算回到大一，我多半还是不会经常出校门，因为其他的惰性因素没变，结果也不会变吧。</p>
+<p>在车走过的路线上，最喜欢的一个地方，太原美术馆、山西省图书馆、山西大剧院等场馆聚集的一个岛(算是吧)上。白天还觉得没什么，到晚上灯光打到剧院上，真的有一种停下车走进去的冲动。我感觉这次去太原，就像村里人进城一样，看见了太多的吸引我的东西。我经常与朋友讨论各个城市如何如何，又说道山西怎么怎么不行了，太原也不及其他的省会城市，可是没想到就算是太原，也有这么多东西吸引我去探索。我想，就算是学校这么偏，人的眼界也不能仅仅局限与一个“小地方”。就像是学校外面还有太原，太原外面还有华北，华北外面还有整个中国、亚洲甚至全世界。</p>
+<p>拓宽视野，说得太理想了，怎么做呢？没想法？那就看看身边那些优秀的人吧！我最近刚好在YouTube上看见一个在清华读书的马来西亚人，之前有人说什么外国人进北大清华比中国人更容易，不过看了视频我发现，人家本来就比大部分人优秀，凭什么不能去呢。</p>
+<p>时间也不早了，最后附上这位YouTuber的一个视频(他在B站也有账号)，准备去睡觉啦。</p>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/uaZRsJ48xrU" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+]]></content>
+      <categories>
+        <category>我</category>
+      </categories>
+      <tags>
+        <tag>日常</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>static 相关总结</title>
+    <url>/2021/06/28/static%20%E7%9B%B8%E5%85%B3%E6%80%BB%E7%BB%93/</url>
+    <content><![CDATA[<p><em>static翻译过来即为“静止的”，用来限定变量或函数。</em></p>
+<h2 id="static的引入"><a href="#static的引入" class="headerlink" title="static的引入"></a>static的引入</h2><p>在函数内部(或者说作用域内部)定义的临时变量都是在栈中分配空间的，使用完函数后便会弹出并时放掉空间。如果想要出作用域后仍然使用该变量，那么你应当把该变量设置为全局变量(失去封装性，不推荐)，或把该变量声明为<code>static</code>。</p>
+<p>实际上<code>static</code>是一种<a href="https://zh.cppreference.com/w/cpp/language/storage_duration">存储类说明符</a>，所谓“存储期”通俗的讲就是对象的生存期。<code>static</code>说明该对象是<em>静态或线程</em>存储期，且是内部链接的(内部链接指变量只能在一个翻译单元使用，外部链接指变量可在多文件程序中使用，如extern)。对于<code>static</code>数据，存储在全局静态存储区中。因此对于<code>static</code>成员变量，它不会占用对象的内存，而是在所有对象之外开辟新的内存。</p>
+<p>值得注意的是，虽然<code>static</code>对象生存期变长了，但它的作用域和<code>non-static</code>对象并没有什么区别。</p>
+<h2 id="static的声明与定义"><a href="#static的声明与定义" class="headerlink" title="static的声明与定义"></a>static的声明与定义</h2><p>由于<code>static</code>对象要在程序一开始时就存在，所以其空间分配只能存在于：类的外部接口的头文件中(类在这里声明)、类定义的内部或<code>main()</code>函数前。由于类声明时并不分配空间，故<code>static</code>对象的定义应该在类声明外，且在<code>main()</code>函数之前，定义的形式如下：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">type class::name = value;</span><br></pre></td></tr></table></figure>
+
+<p><code>type</code>是变量的类型，<code>class</code>是类名，<code>name</code>是变量名，<code>value</code>是初始值。注意定义时不要加<code>static</code>修饰符。若一个<code>static</code>对象没有定义，但不使用它，程序也能成功编译。</p>
+<p>访问类中<code>static</code>对象时，可以通过作用域访问，也可通过对象成员访问。</p>
+<h2 id="函数中的静态变量"><a href="#函数中的静态变量" class="headerlink" title="函数中的静态变量"></a>函数中的静态变量</h2><p>函数中的静态变量只被分配一次空间。示例如下：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">print</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">int</span> count = <span class="number">0</span>; <span class="comment">// 定义</span></span><br><span class="line">  ++count;</span><br><span class="line">  <span class="built_in">cout</span> &lt;&lt; count &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  print();</span><br><span class="line">  print();</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>此时输出为<code>1</code>和<code>2</code>。如果将一个类的对象声明为<code>static</code>，那它的生存周期和静态变量是类似的。</p>
+<h2 id="静态函数-内部函数"><a href="#静态函数-内部函数" class="headerlink" title="静态函数(内部函数)"></a>静态函数(内部函数)</h2><p>通常定义的函数默认都是全局的，是可以被其它文件所调用的。加上<code>static</code>修饰函数后，这个函数就变成此文件内专属的函数了。使用静态函数，可以避免不同文件内函数名冲突的问题。但是与静态变量不同的是，静态变量被改变了存储位置，但静态函数仅是作用域被改变了。</p>
+<p>对于全局变量被声明为<code>static</code>的，也表明了作用域仅存在此文件内。</p>
+<h2 id="类中的静态变量"><a href="#类中的静态变量" class="headerlink" title="类中的静态变量"></a>类中的静态变量</h2><p>类中的静态变量分配在全局静态存储区中，因此这个变量是类所共有的，不能将其初始化放在构造函数中。</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">int</span> i;</span><br><span class="line">  A()&#123;<span class="comment">/* do nothing */</span>&#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> A::i = <span class="number">2</span>; <span class="comment">// 定义</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  A a;</span><br><span class="line">  <span class="built_in">cout</span> &lt;&lt; a.i &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>注意第11行，类成员作为静态变量的定义不能放在类声明中(第4行至第9行)，也不能放在<code>main()</code>函数中，它需要在类外进行定义。而且就算没有创造类的对象，也可以通过作用域访问此静态变量。</p>
+<p>如果该静态成员变量是常量的，即被<code>const</code>修饰的，那么它可以在类声明中初始化。</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  <span class="keyword">const</span> <span class="keyword">static</span> <span class="keyword">int</span> i = <span class="number">3</span>;</span><br><span class="line">  A()&#123;<span class="comment">/* do nothing */</span>&#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  A a;</span><br><span class="line">  <span class="built_in">cout</span> &lt;&lt; a.i &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="类中的静态函数"><a href="#类中的静态函数" class="headerlink" title="类中的静态函数"></a>类中的静态函数</h2><p>同类中的静态变量，类中的静态函数也是属于类共有的，因此它没有<code>this</code>指针。它调用方法也和静态成员变量一样。</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  A()&#123;<span class="comment">/* do nothing */</span>&#125;;</span><br><span class="line">  <span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">print</span><span class="params">()</span></span></span><br><span class="line"><span class="function">  </span>&#123;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;success~&quot;</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  A::print();</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上面代码没问题，但要注意下面的代码，<code>static</code>函数仅能访问静态成员函数或变量，因此以下代码无法编译通过。</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  A()&#123;<span class="comment">/* do nothing */</span>&#125;;</span><br><span class="line">  <span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">print</span><span class="params">()</span></span></span><br><span class="line"><span class="function">  </span>&#123;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; a &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">int</span> a = <span class="number">0</span>;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  A::print();</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>错误为：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">error: invalid use of member ‘A::a’ in <span class="keyword">static</span> member function</span><br></pre></td></tr></table></figure>
+
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>对于函数中或类成员中的静态变量，<code>static</code>改变了变量的生存周期和内存分配位置，并仅有一次定义(若定义时没有被赋值，统一默认为0)，但它的作用域并没有改变。</p>
+<p>对于非类成员的静态函数，<code>static</code>该变了其可见范围(限定在文件内)，但其内存的分配与普通函数是一样的。</p>
+<p>对于类成员的静态函数或静态变量，<code>static</code>将其修饰后，它们就是类所共享的了，可以通过对象访问，也可通过命名空间直接访问。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a href="https://zh.cppreference.com/w/cpp/keyword/static">static - cppreference.com</a></li>
+<li>《C Primer Plus 6th Edition》P373</li>
+<li><a href="https://light-city.club/sc/basic_content/static/">static那些事</a></li>
+</ul>
 ]]></content>
       <categories>
         <category>学习</category>
@@ -1038,79 +1111,6 @@
 <ul>
 <li>严肃对待编译器发出的警告信息。努力在你的编译器的最高(最严苛)警告级别下争取“无任何警告”的荣誉。</li>
 <li>不要过度倚赖编译器的报警能力，因为不同的编译器对待事情的态度并不相同。一旦移植到另一个编译器上，你原本倚赖的警告信息有可能消失。</li>
-</ul>
-]]></content>
-      <categories>
-        <category>学习</category>
-      </categories>
-      <tags>
-        <tag>C++</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>C++ 中的声明与定义</title>
-    <url>/2021/06/28/C++%20%E4%B8%AD%E7%9A%84%E5%A3%B0%E6%98%8E%E4%B8%8E%E5%AE%9A%E4%B9%89/</url>
-    <content><![CDATA[<p><em>在总结static知识的时候，发现我对变量的声明与定义概念有一些模糊，于是也对这个知识进行了小结。</em></p>
-<h2 id="声明和定义的关系"><a href="#声明和定义的关系" class="headerlink" title="声明和定义的关系"></a>声明和定义的关系</h2><p>C++支持分离式编译，即程序可拆分为多个文件，每个文件可单独编译。有时候就需要在不同文件中使用别的文件内的代码，为此，C++将声明与定义区分开来。<strong>声明</strong>使得名字被程序所知，一个文件想要使用别的文件中定义的名字，那必须包含对此名字的声明。<strong>定义</strong>负责创建与名字关联的实体，分配内存空间也是在此时进行的(此时也可能给一个变量赋初值)。</p>
-<h2 id="变量的声明与定义"><a href="#变量的声明与定义" class="headerlink" title="变量的声明与定义"></a>变量的声明与定义</h2><p>对于变量来说，定义变量时也就声明了该变量。如<code>int j</code>，同时声明并定义了变量。</p>
-<p>而声明变量时不一定定义了变量，此时需要使用<code>extern</code>关键字限定，如<code>extern int i</code>，并不是定义，也没有重新分配内存空间。</p>
-<p>如果被<code>extern</code>关键字标记的变量同时被赋初值，那么也就抵消掉了<code>extern</code>的作用，此时仅为定义而非声明了，如<code>extern double pi = 3.14</code>。</p>
-<p>一个变量永远只能有一次定义，但可以声明多次。在变量被使用之前，必须保证变量已被定义，并在该文件内有声明。</p>
-<h2 id="函数的声明与定义"><a href="#函数的声明与定义" class="headerlink" title="函数的声明与定义"></a>函数的声明与定义</h2><p>函数的声明与定义不是那么复杂，只有函数头，而没有函数体的就是函数声明，有没有<code>extern</code>限定都没关系，如<code>int fun()</code>或<code>extern int fun()</code>。</p>
-<p>函数定义即带上函数体，如<code>int fun() &#123; return 0; &#125;</code>。</p>
-<p>通常函数的声明在<code>.h</code>文件中，函数的定义在<code>.c</code>或<code>.cpp</code>文件中。</p>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
-<li>《C++ Primer 5th Edition》P41</li>
-</ul>
-]]></content>
-      <categories>
-        <category>学习</category>
-      </categories>
-      <tags>
-        <tag>C++</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>static 相关总结</title>
-    <url>/2021/06/28/static%20%E7%9B%B8%E5%85%B3%E6%80%BB%E7%BB%93/</url>
-    <content><![CDATA[<p><em>static翻译过来即为“静止的”，用来限定变量或函数。</em></p>
-<h2 id="static的引入"><a href="#static的引入" class="headerlink" title="static的引入"></a>static的引入</h2><p>在函数内部(或者说作用域内部)定义的临时变量都是在栈中分配空间的，使用完函数后便会弹出并时放掉空间。如果想要出作用域后仍然使用该变量，那么你应当把该变量设置为全局变量(失去封装性，不推荐)，或把该变量声明为<code>static</code>。</p>
-<p>实际上<code>static</code>是一种<a href="https://zh.cppreference.com/w/cpp/language/storage_duration">存储类说明符</a>，所谓“存储期”通俗的讲就是对象的生存期。<code>static</code>说明该对象是<em>静态或线程</em>存储期，且是内部链接的(内部链接指变量只能在一个翻译单元使用，外部链接指变量可在多文件程序中使用，如extern)。对于<code>static</code>数据，存储在全局静态存储区中。因此对于<code>static</code>成员变量，它不会占用对象的内存，而是在所有对象之外开辟新的内存。</p>
-<p>值得注意的是，虽然<code>static</code>对象生存期变长了，但它的作用域和<code>non-static</code>对象并没有什么区别。</p>
-<h2 id="static的声明与定义"><a href="#static的声明与定义" class="headerlink" title="static的声明与定义"></a>static的声明与定义</h2><p>由于<code>static</code>对象要在程序一开始时就存在，所以其空间分配只能存在于：类的外部接口的头文件中(类在这里声明)、类定义的内部或<code>main()</code>函数前。由于类声明时并不分配空间，故<code>static</code>对象的定义应该在类声明外，且在<code>main()</code>函数之前，定义的形式如下：</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">type class::name = value;</span><br></pre></td></tr></table></figure>
-
-<p><code>type</code>是变量的类型，<code>class</code>是类名，<code>name</code>是变量名，<code>value</code>是初始值。注意定义时不要加<code>static</code>修饰符。若一个<code>static</code>对象没有定义，但不使用它，程序也能成功编译。</p>
-<p>访问类中<code>static</code>对象时，可以通过作用域访问，也可通过对象成员访问。</p>
-<h2 id="函数中的静态变量"><a href="#函数中的静态变量" class="headerlink" title="函数中的静态变量"></a>函数中的静态变量</h2><p>函数中的静态变量只被分配一次空间。示例如下：</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">print</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">int</span> count = <span class="number">0</span>; <span class="comment">// 定义</span></span><br><span class="line">  ++count;</span><br><span class="line">  <span class="built_in">cout</span> &lt;&lt; count &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  print();</span><br><span class="line">  print();</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>此时输出为<code>1</code>和<code>2</code>。如果将一个类的对象声明为<code>static</code>，那它的生存周期和静态变量是类似的。</p>
-<h2 id="静态函数-内部函数"><a href="#静态函数-内部函数" class="headerlink" title="静态函数(内部函数)"></a>静态函数(内部函数)</h2><p>通常定义的函数默认都是全局的，是可以被其它文件所调用的。加上<code>static</code>修饰函数后，这个函数就变成此文件内专属的函数了。使用静态函数，可以避免不同文件内函数名冲突的问题。但是与静态变量不同的是，静态变量被改变了存储位置，但静态函数仅是作用域被改变了。</p>
-<p>对于全局变量被声明为<code>static</code>的，也表明了作用域仅存在此文件内。</p>
-<h2 id="类中的静态变量"><a href="#类中的静态变量" class="headerlink" title="类中的静态变量"></a>类中的静态变量</h2><p>类中的静态变量分配在全局静态存储区中，因此这个变量是类所共有的，不能将其初始化放在构造函数中。</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">int</span> i;</span><br><span class="line">  A()&#123;<span class="comment">/* do nothing */</span>&#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> A::i = <span class="number">2</span>; <span class="comment">// 定义</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  A a;</span><br><span class="line">  <span class="built_in">cout</span> &lt;&lt; a.i &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>注意第11行，类成员作为静态变量的定义不能放在类声明中(第4行至第9行)，也不能放在<code>main()</code>函数中，它需要在类外进行定义。而且就算没有创造类的对象，也可以通过作用域访问此静态变量。</p>
-<p>如果该静态成员变量是常量的，即被<code>const</code>修饰的，那么它可以在类声明中初始化。</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  <span class="keyword">const</span> <span class="keyword">static</span> <span class="keyword">int</span> i = <span class="number">3</span>;</span><br><span class="line">  A()&#123;<span class="comment">/* do nothing */</span>&#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  A a;</span><br><span class="line">  <span class="built_in">cout</span> &lt;&lt; a.i &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="类中的静态函数"><a href="#类中的静态函数" class="headerlink" title="类中的静态函数"></a>类中的静态函数</h2><p>同类中的静态变量，类中的静态函数也是属于类共有的，因此它没有<code>this</code>指针。它调用方法也和静态成员变量一样。</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  A()&#123;<span class="comment">/* do nothing */</span>&#125;;</span><br><span class="line">  <span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">print</span><span class="params">()</span></span></span><br><span class="line"><span class="function">  </span>&#123;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;success~&quot;</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  A::print();</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>上面代码没问题，但要注意下面的代码，<code>static</code>函数仅能访问静态成员函数或变量，因此以下代码无法编译通过。</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  A()&#123;<span class="comment">/* do nothing */</span>&#125;;</span><br><span class="line">  <span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">print</span><span class="params">()</span></span></span><br><span class="line"><span class="function">  </span>&#123;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; a &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">int</span> a = <span class="number">0</span>;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  A::print();</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>错误为：</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">error: invalid use of member ‘A::a’ in <span class="keyword">static</span> member function</span><br></pre></td></tr></table></figure>
-
-<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>对于函数中或类成员中的静态变量，<code>static</code>改变了变量的生存周期和内存分配位置，并仅有一次定义(若定义时没有被赋值，统一默认为0)，但它的作用域并没有改变。</p>
-<p>对于非类成员的静态函数，<code>static</code>该变了其可见范围(限定在文件内)，但其内存的分配与普通函数是一样的。</p>
-<p>对于类成员的静态函数或静态变量，<code>static</code>将其修饰后，它们就是类所共享的了，可以通过对象访问，也可通过命名空间直接访问。</p>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
-<li><a href="https://zh.cppreference.com/w/cpp/keyword/static">static - cppreference.com</a></li>
-<li>《C Primer Plus 6th Edition》P373</li>
-<li><a href="https://light-city.club/sc/basic_content/static/">static那些事</a></li>
 </ul>
 ]]></content>
       <categories>

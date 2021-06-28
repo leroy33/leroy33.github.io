@@ -1,0 +1,680 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Effective C++ 笔记 | Be Your Leroy</title><meta name="keywords" content="C++"><meta name="author" content="Leroy"><meta name="copyright" content="Leroy"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="前段时间学习了 C++ Primer，七八百页的书实在是不好啃，导致我基本上没怎么看这本书的第三部分。现在开始C++进阶部分的学习。虽然 C++到今年已经发展到 C++20，而且这本书发行的时候甚至还没有 C++11，但这本书中的某些方法仍然是有用的。而且本书的作者于近些年新编了一部 Effective Modern C++，引入了 C++11和 C++14的新特性，可以作为此书的补充。 本书中部">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Effective C++ 笔记">
+<meta property="og:url" content="https://leroy3.xyz/2021/03/27/Effective-C-%E7%AC%94%E8%AE%B0/index.html">
+<meta property="og:site_name" content="Be Your Leroy">
+<meta property="og:description" content="前段时间学习了 C++ Primer，七八百页的书实在是不好啃，导致我基本上没怎么看这本书的第三部分。现在开始C++进阶部分的学习。虽然 C++到今年已经发展到 C++20，而且这本书发行的时候甚至还没有 C++11，但这本书中的某些方法仍然是有用的。而且本书的作者于近些年新编了一部 Effective Modern C++，引入了 C++11和 C++14的新特性，可以作为此书的补充。 本书中部">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://z3.ax1x.com/2021/06/11/2WvzE4.jpg">
+<meta property="article:published_time" content="2021-03-27T14:43:26.000Z">
+<meta property="article:modified_time" content="2021-06-11T06:10:02.754Z">
+<meta property="article:author" content="Leroy">
+<meta property="article:tag" content="C++">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://z3.ax1x.com/2021/06/11/2WvzE4.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://leroy3.xyz/2021/03/27/Effective-C-%E7%AC%94%E8%AE%B0/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"簡"},
+  noticeOutdate: {"limitDay":500,"position":"top","messagePrev":"It has been","messageNext":"days since the last update, the content of the article may be outdated."},
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: true,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Effective C++ 笔记',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2021-06-11 14:10:02'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const fontSizeVal = saveToLocal.get('global-font-size')
+    if (fontSizeVal !== undefined) {
+      document.documentElement.style.setProperty('--global-font-size', fontSizeVal + 'px')
+    }
+    })(window)</script><meta name="generator" content="Hexo 5.2.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/img/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">11</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">5</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">3</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://z3.ax1x.com/2021/06/11/2WvzE4.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Be Your Leroy</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Effective C++ 笔记</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-03-27T14:43:26.000Z" title="发表于 2021-03-27 22:43:26">2021-03-27</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-06-11T06:10:02.754Z" title="更新于 2021-06-11 14:10:02">2021-06-11</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%AD%A6%E4%B9%A0/">学习</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">11.6k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>37分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Effective C++ 笔记"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p><em>前段时间学习了 C++ Primer，七八百页的书实在是不好啃，导致我基本上没怎么看这本书的第三部分。现在开始C++进阶部分的学习。虽然 C++到今年已经发展到 C++20，而且这本书发行的时候甚至还没有 C++11，但这本书中的某些方法仍然是有用的。而且本书的作者于近些年新编了一部 Effective Modern C++，引入了 C++11和 C++14的新特性，可以作为此书的补充。</em></p>
+<p><em>本书中部分方法在 C++11中解决方法不同，我想起来了的就在后面有所注释。本文会持续更新。</em></p>
+<h1 id="让自己习惯C"><a href="#让自己习惯C" class="headerlink" title="让自己习惯C++"></a>让自己习惯C++</h1><h2 id="视C-为一个语言联邦"><a href="#视C-为一个语言联邦" class="headerlink" title="视C++为一个语言联邦"></a>视C++为一个语言联邦</h2><ul>
+<li>C</li>
+<li>Object-Oriented C++</li>
+<li>Template C++</li>
+<li>STL</li>
+</ul>
+<h2 id="尽量以-const-enum-inline-替换-define"><a href="#尽量以-const-enum-inline-替换-define" class="headerlink" title="尽量以 const, enum, inline 替换 #define"></a>尽量以 const, enum, inline 替换 #define</h2><p><em>(即宁可以编译器替换预处理器)</em></p>
+<p>常量替换#define时，常放在头文件中，而且此时有两点需要注意。若此常量为指针，则需要定义指向常量的常量指针(两个const)，类似于：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="keyword">char</span>* <span class="keyword">const</span> ch = <span class="string">&quot;hello&quot;</span>;</span><br></pre></td></tr></table></figure>
+
+<p>但是string通常比char*-based更合宜，上述更适合改为：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="built_in">std</span>::<span class="built_in">string</span> ch = <span class="string">&quot;hello&quot;</span>;</span><br></pre></td></tr></table></figure>
+
+<p>若此常量为class专属常量，为了使其作用域(scope)限制在class内部，需要使其成为class的一个成员，且此成员需要定义为static成员：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">GamePlayer</span> &#123;</span></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">const</span> <span class="keyword">int</span> NumTurns = <span class="number">5</span>; <span class="comment">// 常量声明</span></span><br><span class="line">    <span class="keyword">int</span> scores[NumTurns];</span><br><span class="line">    ...</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>上述是一个NumTurns的声明，通常C++还要求一个定义式，但针对整数类型如int、char、bool等，只要不取它们的地址就可以不要定义式。但如果硬要取某个class内的常量的地址，则需要额外提供显示的定义式：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> GamePlayer::NumTurns; <span class="comment">// NumTurns的定义，注意没有给予数值</span></span><br></pre></td></tr></table></figure>
+
+<p>上述定义要放于实现文件中(非头文件)，因在声明时有初值为5，因此此时可不赋初值。</p>
+<p>对于非整数类型的常量，可将定义放于头文件中并于此时赋初值：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CostEstimate</span> &#123;</span></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">const</span> <span class="keyword">double</span> FudgeFactor; <span class="comment">// 常量声明，头文件内</span></span><br><span class="line">    ...</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">double</span> CostEstimate::FudgeFactor = <span class="number">1.35</span>; <span class="comment">// 常量定义，头文件内</span></span><br></pre></td></tr></table></figure>
+
+<p><em>(中间略去部分enum hack及模板元编程的相关内容)</em></p>
+<p>针对于类似于函数的宏(macros)，如：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> CALL_WITH_MAX(a, b) f((a) &gt; (b) ? (a) : (b)) <span class="comment">// 调用函数f</span></span></span><br></pre></td></tr></table></figure>
+
+<p>可以使用内联的template将其替换：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">callWithMax</span><span class="params">(<span class="keyword">const</span> T&amp; a, <span class="keyword">const</span> T&amp; b)</span> <span class="comment">// pass by reference-to-const</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    f(a &gt; b ? a : b);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这是一个真正的函数，它是内联的，意味着拥有类似宏一样“替换”的能力。而且它拥有作用域和访问规则，意味着它可以属于类内或属于private。</p>
+<p><strong>请记住</strong></p>
+<ul>
+<li>对于单纯的常量，最好用const或enum替换#define</li>
+<li>对于类似函数的宏，最好用inline函数替换#define</li>
+</ul>
+<h2 id="尽可能使用const"><a href="#尽可能使用const" class="headerlink" title="尽可能使用const"></a>尽可能使用const</h2><p>针对于书中所言STL迭代器的底层与顶层const的转换，在C++ 11中已可由cbegin()和cend()等方法解决。</p>
+<p>对于函数返回值，可以返回一个const的值，以避免一些意外，而又不失安全性和高效性。例如可能遇到这种情况：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (a * b = c) ... <span class="comment">// 原本的意思是判断是否相等</span></span><br></pre></td></tr></table></figure>
+
+<p>如果此时operator*定义返回值为const类型，则可以避开诸如此类的错误。</p>
+<p>对于const成员函数，通常用于与non-const成员函数构成重载，他们的区别通常只是常量性(constness)的不同，如：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">TextBlock</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    ...</span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">char</span>&amp; <span class="keyword">operator</span>[] (<span class="built_in">std</span>::<span class="keyword">size_t</span> pos) <span class="keyword">const</span> <span class="comment">// for const对象</span></span><br><span class="line">    &#123; <span class="keyword">return</span> text[pos]; &#125;</span><br><span class="line">    <span class="keyword">char</span>&amp; <span class="keyword">operator</span>[] (<span class="built_in">std</span>::<span class="keyword">size_t</span> pos) <span class="comment">// for non-const对象</span></span><br><span class="line">    &#123; <span class="keyword">return</span> text[pos]; &#125;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">string</span> text;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>当然，在某些const函数中也需要改变一些变量(如一些标志变量)，为了突破const函数限制，可以将这些需要修改的变量声明为mutable(与const是反义词)，这样即使在const成员函数内部也可以更改这些变量值了。</p>
+<p>有些时候，一些函数需要进行边界检验、数据完善性检验等操作，它会重复出现在const版本和non-const版本的代码中，维护起来很不方便。当然可以写一个应用函数，这两个版本都调用它。然而书中提出了更好的方法，即通过non-const版本调用const版本来实现重载：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">TextBlock</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    ...</span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">char</span>&amp; <span class="keyword">operator</span>[] (<span class="built_in">std</span>::<span class="keyword">size_t</span> pos) <span class="keyword">const</span> <span class="comment">// 没变</span></span><br><span class="line">    &#123;</span><br><span class="line">        ...</span><br><span class="line">        ...</span><br><span class="line">        <span class="keyword">return</span> text[pos];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">char</span>&amp; <span class="keyword">operator</span>[] (<span class="built_in">std</span>::<span class="keyword">size_t</span> pos)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">            <span class="keyword">const_cast</span>&lt;<span class="keyword">char</span>&amp;&gt;(</span><br><span class="line">                <span class="keyword">static_cast</span>&lt;<span class="keyword">const</span> TextBlock&amp;&gt;(*<span class="keyword">this</span>)[pos]</span><br><span class="line">            );</span><br><span class="line">    &#125;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">string</span> text;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>这份代码进行了两次转型，一次将*this从TextBlock&amp;转为const TextBlock&amp;，使operator调用const版本的。第二次则将const operator[]移除const。<strong>尤其注意，只能non-const版本调用const版本来避免重复，而不能const版本调用non-const版本。</strong>因为后者不能保证对象不被改变。</p>
+<p><strong>请记住</strong></p>
+<ul>
+<li>某些东西声明为const可帮助编译器检测错误。const可加于任何作用域内的对象、函数参数、函数返回类型以及函数本体上。</li>
+<li>注意“概念上的常量性”，常量到底约束了什么。</li>
+<li>当const和non-const成员函数有重复部分，可用non-const版本调用const版本避免重复。</li>
+</ul>
+<h2 id="确定对象被使用前已先被初始化"><a href="#确定对象被使用前已先被初始化" class="headerlink" title="确定对象被使用前已先被初始化"></a>确定对象被使用前已先被初始化</h2><p>对于类中的成员变量，初始化的工作通常交给构造函数完成。而且不要在构造函数内部赋值进行“初始化”，这并非初始化。而是要通过初始化列表完成初始化，这样只调用一次copy构造函数更高效。尽管列表中可以不包含所有成员，但最好还是包含所有的。</p>
+<p>本书中还提到“不同编译单元内定义之non-local static对象”的初始化次序。这个名词比较长，分解如下：</p>
+<blockquote>
+<p>static对象不同于stack(栈)和heap(堆)对象，它的生命周期与程序声明周期相同。而所谓local static指的是函数内的static对象，其他的则称为non-local static对象。</p>
+</blockquote>
+<blockquote>
+<p>编译单元(translation unit)指的是产出单一目标文件的那些源码，对应于MSVS中也就是一个项目工程中的头文件及源文件。</p>
+</blockquote>
+<p>以两个源文件为例，若一个编译单元中的non-local static对象初始化需要用到另一个编译单元中的non-local static对象，由于C++并未定义明确的初始化顺序，所以需要自行解决。</p>
+<p>实例如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">FileSystem</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    ...</span><br><span class="line">    <span class="function"><span class="built_in">std</span>::<span class="keyword">size_t</span> <span class="title">numDisks</span><span class="params">()</span> <span class="keyword">const</span></span>;</span><br><span class="line">    ...</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">extern</span> FileSystem tfs; <span class="comment">// 预留给客户使用的对象</span></span><br></pre></td></tr></table></figure>
+
+<p>此时客户有一类：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Directory</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    Directory( params );</span><br><span class="line">    ...</span><br><span class="line">&#125;;</span><br><span class="line">Directory::Directory( params )</span><br><span class="line">&#123;</span><br><span class="line">    ...</span><br><span class="line">    <span class="built_in">std</span>::<span class="keyword">size_t</span> disks = tfs.numDisks(); <span class="comment">// 使用tfs对象</span></span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>当客户需要创建对象时：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">Directory <span class="title">tempDir</span><span class="params">( params )</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>现在问题出现了，程序不能肯定tfs早于tempDir已被创建。针对此提出的解决方案是将non-local static对象搬运到自己的专属函数内(该对象在内部被声明为static)，这些函数返回一个引用指向它所含对象。实践如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">FileSystem</span> &#123;</span> ... &#125;; <span class="comment">// 与前面相同</span></span><br><span class="line"><span class="function">FileSystem&amp; <span class="title">tfs</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">static</span> FileSystem fs;</span><br><span class="line">    <span class="keyword">return</span> fs;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Directory</span> &#123;</span> ... &#125;; <span class="comment">// 与前面相同</span></span><br><span class="line">Directory::Directory( params )</span><br><span class="line">&#123;</span><br><span class="line">    ...</span><br><span class="line">    <span class="built_in">std</span>::<span class="keyword">size_t</span> disks = tfs().numDisks();</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br><span class="line"><span class="function">Directory&amp; <span class="title">tempDir</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">static</span> Directory td;</span><br><span class="line">    <span class="keyword">return</span> td;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如此修改后，使用与之前一样，只不过对象tfs和tempDir使用时变为tfs()和tempDir()，这样能保证初始化的顺序。实际上，这是设计模式(Design Patterns)中单例(Singleton)的常见手法(我对这一部分的知识还不了解)。</p>
+<p><strong>请记住</strong></p>
+<ul>
+<li>为内置对象进行手工初始化。</li>
+<li>构造函数最好用初始化列表进行初始化。</li>
+<li>以local static对象替换non-local static对象。</li>
+</ul>
+<h1 id="构造-析构-赋值运算"><a href="#构造-析构-赋值运算" class="headerlink" title="构造/析构/赋值运算"></a>构造/析构/赋值运算</h1><h2 id="了解C-默默编写并调用哪些函数"><a href="#了解C-默默编写并调用哪些函数" class="headerlink" title="了解C++默默编写并调用哪些函数"></a>了解C++默默编写并调用哪些函数</h2><p>针对书上所指的default构造函数、copy构造函数及copy assignment构造函数，C++ 11还在新提出右值引用的基础上提出了move构造函数和move assignment构造函数。若成员变量中有诸如引用、指针一类的变量，使用默认的拷贝构造函数常常会出错。</p>
+<p><strong>请记住</strong></p>
+<ul>
+<li>编译器会产生默认的default构造函数、copy构造函数、copy assignment构造函数以及析构函数。</li>
+</ul>
+<h2 id="若不想使用编译器自动生成的函数，就应该明确拒绝"><a href="#若不想使用编译器自动生成的函数，就应该明确拒绝" class="headerlink" title="若不想使用编译器自动生成的函数，就应该明确拒绝"></a>若不想使用编译器自动生成的函数，就应该明确拒绝</h2><p>本书介绍的方法主要是将拷贝构造函数放于private域中，而C++ 11中不这样做，而是在想要阻止的拷贝构造函数之后加上=delete，便可以阻止拷贝。</p>
+<p><strong>请记住</strong></p>
+<ul>
+<li>为了阻止默认合成的对应的成员函数起作用，可以将此类成员函数声明为private并不予实现。**(C++ 11中在函数参数列表后加上=delete达到效果)**</li>
+</ul>
+<h2 id="为多态基类声明virtual析构函数"><a href="#为多态基类声明virtual析构函数" class="headerlink" title="为多态基类声明virtual析构函数"></a>为多态基类声明virtual析构函数</h2><p>对于一个被继承的base class，如果它的析构函数是non-virtual的，那么当一个由该基类指针指向的派生类对象被释放时，可能造成基类内存释放而派生类内存未释放的泄露问题。因此要继承时要确认base class是否有虚析构函数。</p>
+<p>若该类设计时不是为了被继承，则其析构函数最好是non-virtual的，否则会造成额外的空间开销。</p>
+<p>有时我们需要一个抽象基类，这样的类的有一个函数是纯虚的(在虚函数参数列表后加=0)。有时因为没有其他函数能成为virtual的，而会遇到纯虚(pure virtual)析构函数。要注意纯虚析构函数必须要有类外的定义，否则编译不通过。(并不是很清楚此处提到的纯虚析构函数有什么实际作用)</p>
+<p><strong>请注意</strong></p>
+<ul>
+<li>为了实现多态的基类需要有一个虚析构函数。一个类只要由任何虚函数，那么它就要有一个虚析构函数。</li>
+<li>一个类如果不是设计来做基类或实现多态，那么析构函数就应该是non-virtual的。</li>
+</ul>
+<h2 id="别让异常逃离析构函数"><a href="#别让异常逃离析构函数" class="headerlink" title="别让异常逃离析构函数"></a>别让异常逃离析构函数</h2><p>如果析构函数里面吐出异常，那么如果这个类有一个类似于vector的对象，当这个vector对象离开作用域时所有的类都会析构，在多个异常存在的情况下，程序不是结束执行就是导致不明确行为。</p>
+<p>但是如果析构函数在失败时需要抛出异常呢？举个例子，下面这个class负责数据库连接：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">DBConnection</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    ...</span><br><span class="line">    <span class="comment">// 此函数返回DBConnection对象</span></span><br><span class="line">    <span class="function"><span class="keyword">static</span> DBConnection <span class="title">create</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="comment">// 关闭联机；失败则抛出异常</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">close</span><span class="params">()</span></span>;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>为了使客户不忘调用close()，通常会使用另一个类来管理DBConnection资源(后文会对此进行详述)：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">DBConn</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    ...</span><br><span class="line">    ~DBConn()</span><br><span class="line">    &#123;</span><br><span class="line">        db.close(); <span class="comment">// 确保数据库连接总是会被关闭</span></span><br><span class="line">    &#125;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    DBConnection db;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>客户代码如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 通过DBConn的接口管理DBConnection对象</span></span><br><span class="line">    <span class="function">DBConn <span class="title">dbc</span><span class="params">(DBConnection::create())</span></span>;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如果DBConn调用close导致异常，那么该异常就逃离了DBConn的析构函数，会造成问题。通常有两种方法来避免：</p>
+<ul>
+<li>若close抛出异常就结束了，则在后续调用abort：</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">DBConn::~DBConn()</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">try</span> &#123; db.close(); &#125;</span><br><span class="line">    <span class="keyword">catch</span> (...) &#123;</span><br><span class="line">        <span class="comment">// 制作运转记录，记下对close的调用失败</span></span><br><span class="line">        <span class="built_in">std</span>::<span class="built_in">abort</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这样可阻止异常从析构函数传播出去。</p>
+<ul>
+<li>吞下因调用close而产生的异常：</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">DBConn::~DBConn()</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">try</span> &#123; db.close(); &#125;</span><br><span class="line">    <span class="keyword">catch</span> (...) &#123;</span><br><span class="line">        <span class="comment">// 制作运转记录，记下对close的调用失败</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这样虽然吞掉了异常，但能使程序继续运行。</p>
+<p>但这两种方案终究不能对“导致close抛出异常”的情况作出反应。本书重新设计了DBConn接口：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">DBConn</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    ...</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">close</span><span class="params">()</span> <span class="comment">// 供客户使用的新函数</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        db.close();</span><br><span class="line">        closed = ture;</span><br><span class="line">    &#125;</span><br><span class="line">    ~DBConn()</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (!closed) &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                db.close();</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">catch</span> (...) &#123;</span><br><span class="line">                <span class="comment">// 制作运转记录，记下对close的调用失败</span></span><br><span class="line">                ... <span class="comment">// 结束程序或吞下异常</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    DBConnection db;</span><br><span class="line">    <span class="keyword">bool</span> closed;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>这样便给客户提供了一个处理异常的机会(指DBConn::close())，而且DBConn类自己也可以确保当客户忘记使用close时不至于遗失数据连接。然而此时若DBConnection的close调用失败，则只能使用刚刚上述的两种老方法了(可以看作是双保险吧)。这些所作都是为了析构函数不吐出异常(这会使得程序发生不明行为)。</p>
+<p><strong>请记住</strong></p>
+<ul>
+<li>析构函数绝对不要吐出异常。如果一个被析构函数调用的函数可能抛出异常，析构函数应该捕捉任何异常，然后吞下它们(不传播)或结束程序。</li>
+<li>如果客户需要对某个操作函数运行期间抛出的异常做出反应，那么class应该提供一个普通函数(而非在析构函数中)执行该操作。</li>
+</ul>
+<h2 id="绝不再构造和析构过程中调用virtual函数"><a href="#绝不再构造和析构过程中调用virtual函数" class="headerlink" title="绝不再构造和析构过程中调用virtual函数"></a>绝不再构造和析构过程中调用virtual函数</h2><p>如果这样的类被继承了，举个例子，派生类构造时会先调用基类的构造函数，然后基类的构造函数会调用基类的virtual函数，这显然与想要的虚函数的用法相异了。析构函数中调用virtual函数也是如此。</p>
+<p>解决方法是将派生类必要的构造信息向上传递至基类构造函数，而不直接在构造或析构函数中调用virtual函数。</p>
+<p><strong>请记住</strong></p>
+<ul>
+<li>在构造和析构期间不要调用virtual函数，因为这类调用从不下降至派生类。</li>
+</ul>
+<h2 id="令operator-返回一个-this的引用"><a href="#令operator-返回一个-this的引用" class="headerlink" title="令operator=返回一个*this的引用"></a>令operator=返回一个*this的引用</h2><p>这样做能方便地实现连锁形式：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> x, y, z;</span><br><span class="line">x = y = z = <span class="number">15</span>; <span class="comment">// 被解析为x = (y = (z = 15);</span></span><br></pre></td></tr></table></figure>
+
+<p>除了operator=，其他地运算符最好也return *this。</p>
+<p><strong>请记住</strong></p>
+<ul>
+<li>令赋值操作符返回一个*this的引用。</li>
+</ul>
+<h2 id="在operator-中处理“自我赋值”"><a href="#在operator-中处理“自我赋值”" class="headerlink" title="在operator=中处理“自我赋值”"></a>在operator=中处理“自我赋值”</h2><p>自我赋值，类似于：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Widget</span> &#123;</span> ... &#125;;</span><br><span class="line">Widget w;</span><br><span class="line">w = w;</span><br></pre></td></tr></table></figure>
+
+<p>自己的类编写赋值操作符时，可能会先把赋值的成员对象先删掉了。但如果遇上自我赋值这种情况，也就把要赋值的对象给删掉了，就会造成问题：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Widget&amp; Widget::<span class="keyword">operator</span>=(<span class="keyword">const</span> Widget&amp; rhs)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">delete</span> pb; <span class="comment">// pb是成员变量</span></span><br><span class="line">    pb = <span class="keyword">new</span> Bitmap(*rhs.pb);</span><br><span class="line">    <span class="keyword">return</span> *<span class="keyword">this</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>解决方法很简单，加上检测即可：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Widget&amp; Widget::<span class="keyword">operator</span>=(<span class="keyword">const</span> Widget&amp; rhs)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span> == &amp;rhs) <span class="keyword">return</span> *<span class="keyword">this</span>; <span class="comment">// 检测</span></span><br><span class="line">    <span class="keyword">delete</span> pb; <span class="comment">// pb是成员变量</span></span><br><span class="line">    pb = <span class="keyword">new</span> Bitmap(*rhs.pb);</span><br><span class="line">    <span class="keyword">return</span> *<span class="keyword">this</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>更加进阶的，当我们关注“异常安全性”(详见条款29)时会有以下代码：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Widget&amp; Widget::<span class="keyword">operator</span>=(<span class="keyword">const</span> Widget&amp; rhs)</span><br><span class="line">&#123;</span><br><span class="line">    Bitmap* pOrig = pb; <span class="comment">// 记住原pb的指向</span></span><br><span class="line">    pb = <span class="keyword">new</span> Bitmap(*rhs.pb); <span class="comment">// 令pb指向rhs中的pb，完成赋值</span></span><br><span class="line">    <span class="keyword">delete</span> pOrig; <span class="comment">// 删除原pb</span></span><br><span class="line">    <span class="keyword">return</span> *<span class="keyword">this</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>通常满足“异常安全性”时会自动满足“自我赋值安全”。本书还提供了所谓copy and swap技术，同样可以达到这种效果：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Widget</span> &#123;</span></span><br><span class="line">    ...</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">swap</span><span class="params">(Widget&amp; rhs)</span></span>; <span class="comment">// 交换*this和rhs数据</span></span><br><span class="line">&#125;;</span><br><span class="line">Widget&amp; Widget::<span class="keyword">operator</span>=(<span class="keyword">const</span> Widget&amp; rhs)</span><br><span class="line">&#123;</span><br><span class="line">    Widget temp(rhs); <span class="comment">// 拷贝rhs</span></span><br><span class="line">    swap(temp); <span class="comment">// 交换</span></span><br><span class="line">    <span class="keyword">return</span> *<span class="keyword">this</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>请记住</strong></p>
+<ul>
+<li>确保当对象自我赋值时operator=有良好行为。其中技术包括比较“来源对象”和“目标对象”的地址、精心周到的语句顺序、以及copy-and-swap。</li>
+<li>确定任何函数如果操作一个以上的对象，而其中多个对象是同一个对象时，其行为仍然正确。</li>
+</ul>
+<h2 id="复制对象时勿忘其每一个成分"><a href="#复制对象时勿忘其每一个成分" class="headerlink" title="复制对象时勿忘其每一个成分"></a>复制对象时勿忘其每一个成分</h2><p>将拷贝构造函数和赋值运算符函数统称为拷贝函数，那么使用派生类的拷贝函数时要注意调用基类的拷贝函数。</p>
+<p>通常同一个类的两个拷贝函数形式上差不多，但千万不能用一个拷贝函数调用另一个拷贝函数，正确的做法是写一个private的功能函数，然后这两个拷贝函数都来调用它。</p>
+<p><strong>请记住</strong></p>
+<ul>
+<li>拷贝函数应该确保复制“对象内的所有成员变量”及“所有基类成分”。</li>
+<li>不要尝试以某个拷贝函数实现另一个拷贝函数。应该将共同机能放进第三个函数中，并由两个拷贝函数共同调用。</li>
+</ul>
+<h1 id="资源管理"><a href="#资源管理" class="headerlink" title="资源管理"></a>资源管理</h1><h2 id="以对象管理资源"><a href="#以对象管理资源" class="headerlink" title="以对象管理资源"></a>以对象管理资源</h2><p>C++程序中最常使用的资源就是动态分配内存(如果你分配内存却从来不曾归还它，会导致内存泄漏)，但内存只是你必须管理的众多资源之一。其他常见的资源还包括文件描述器(file descriptors)、互斥锁(mutex locks)、图形界面中的字型和笔刷、数据库连接、以及网络sockets。不论哪一种资源，重要的是，当你不再使用它时，必须将它还给系统。</p>
+<p>可想而知，如果“手动”管理这些资源，很有可能因为失误而忘记释放它们，从而造成内存泄漏。所以我们可以借助类的析构函数来“善后”。</p>
+<p>本书还提到了智能指针auto_ptr，由于C++11中主要使用shared_ptr和unique_ptr，下面的内容便没有多大的参考价值了。</p>
+<p><strong>请记住</strong></p>
+<ul>
+<li>防止资源泄漏，可使用类来管理资源(使用析构函数)。</li>
+<li>通常使用智能指针而不是内置指针。</li>
+</ul>
+<h2 id="在资源管理中心中小心拷贝行为"><a href="#在资源管理中心中小心拷贝行为" class="headerlink" title="在资源管理中心中小心拷贝行为"></a>在资源管理中心中小心拷贝行为</h2><p>对于本书中所讲的内容，C++11中使用=delete禁止对象被拷贝，shared_ptr包含计数器，这些已经解决了问题。</p>
+<h2 id="在资源管理类中提供对原始资源的访问"><a href="#在资源管理类中提供对原始资源的访问" class="headerlink" title="在资源管理类中提供对原始资源的访问"></a>在资源管理类中提供对原始资源的访问</h2><p>对于智能指针，举个例子，一个函数有int*的形参，此时实参为shared_ptr<int> p就不行。有方法get()可以将其转换为“原始”指针，从而访问原始资源(p.get())。</p>
+<p>自己设计的类通常也显示地使用一个方法去获得原始资源，但为了客户使用方便，有时会写一个类型转换功能地函数，从而使其隐式地访问原始资源。</p>
+<p><strong>请记住</strong></p>
+<ul>
+<li>APIs往往要求访问原始资源，所以每一个RAII class应该提供一个“取得其所管理之资源”的办法。</li>
+<li>对原始资源的访问可能经由显式转换或隐式转换。一般而言显式转换比较安全，但隐式转换对客户比较方便。</li>
+</ul>
+<h2 id="成对使用new和delete时要采用相同形式"><a href="#成对使用new和delete时要采用相同形式" class="headerlink" title="成对使用new和delete时要采用相同形式"></a>成对使用new和delete时要采用相同形式</h2><p>就像new一个数组时要使用[n]标注数组大小，delete时也得标注[]来表示释放的对象是数组。</p>
+<p><strong>请记住</strong></p>
+<ul>
+<li>如果你在new表达式中使用[],必须在相应的delete表达式中也使用[]。如果你在new表达式中不使用[]，一定不要在相应的delete表达式中使用[]。</li>
+</ul>
+<h2 id="以独立语句将newed对象置入智能指针"><a href="#以独立语句将newed对象置入智能指针" class="headerlink" title="以独立语句将newed对象置入智能指针"></a>以独立语句将newed对象置入智能指针</h2><p>本书举了这样一例：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">processWidget(<span class="built_in">std</span>::<span class="built_in">shared_ptr</span>&lt;Widget&gt;(<span class="keyword">new</span> Widget), priority());</span><br></pre></td></tr></table></figure>
+
+<p>我们希望的操作顺序是：调用priority，执行new Widget，调用std::shared_ptr构造函数。但对C++编译器来说priority函数调用不一定在第一位，万一顺序是这样：执行new Widget，调用priority，调用std::shared_ptr构造函数，那么一旦调用priority时异常出错，则这个new Widget泄露了。因此新建对象构造智能指针时要独立语句：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="built_in">std</span>::<span class="built_in">shared_ptr</span>&lt;Widget&gt; <span class="title">pw</span><span class="params">(<span class="keyword">new</span> Widget)</span></span>; <span class="comment">// 利用pw</span></span><br><span class="line">processWidget(pw, priority()); <span class="comment">// 不会造成泄露</span></span><br></pre></td></tr></table></figure>
+
+<p>这样便能使上述顺序必定按照我们所想的顺序进行。</p>
+<p><strong>请记住</strong></p>
+<ul>
+<li>以独立语句将newed对象存储于(置入)智能指针内。如果不这样做，一旦异常被抛出，有可能导致难以察觉的资源泄漏。</li>
+</ul>
+<h1 id="设计与声明"><a href="#设计与声明" class="headerlink" title="设计与声明"></a>设计与声明</h1><h2 id="让接口容易被正确使用，不易被误用"><a href="#让接口容易被正确使用，不易被误用" class="headerlink" title="让接口容易被正确使用，不易被误用"></a>让接口容易被正确使用，不易被误用</h2><p>我们设计的类要防范可能输入错的参数(可以用类将输入参数包装一下)，防范类可做什么事(可用const修饰)，考虑客户可能忘记做什么事(比如用智能指针返回值替代普通指针返回值)。</p>
+<p><strong>请记住</strong></p>
+<ul>
+<li>好的接口很容易被正确使用，不容易被误用。你应该在你的所有接口中努力达成这些性质。</li>
+<li>“促进正确使用”的办法包括接口的一致性，以及与内置类型的行为兼容。</li>
+<li>“阻止误用”的办法包括建立新类型、限制类型上的操作，束缚对象值，以及消除客户的资源管理责任。</li>
+<li>shared_ ptr支持定制型删除器。</li>
+</ul>
+<h2 id="设计class犹如设计type"><a href="#设计class犹如设计type" class="headerlink" title="设计class犹如设计type"></a>设计class犹如设计type</h2><p>几乎每个class都会面临这些问题：</p>
+<ul>
+<li><strong>新type的对象应该如何被创建和销毁?</strong> 这会影响到你的class的构造函数和析构函数以及内存分配函数和释放函数(operator new, operator new[], operator delete和operator delete[])的设计，当然前提是如果你打算撰写它们。</li>
+<li><strong>对象的初始化和对象的赋值该有什么样的差别?</strong> 这个答案决定你的构造函数和赋值操作符的行为，以及其间的差异。很重要的是别混淆了“初始化”和“赋值”，因为它们对应于不同的函数调用。</li>
+<li><strong>新type的对象如果被passed by value(以值传递)，意味着什么?</strong> 记住，copy构造函数用来定义一一个type的pass-by-value该如何实现。</li>
+<li><strong>什么是新type的“合法值”?</strong> 对class的成员变量而言，通常只有某些数值集是有效的。那些数值集决定了你的class必须维护的约束条件，也就决定了你的成员函数(特别是构造函数、赋值操作符和所谓”setter”函数)必须进行的错误检查工作。它也影响函数抛出的异常、以及(极少被使用的)函数异常明细列。</li>
+<li><strong>你的新type需要配合某个继承图系吗?</strong> 如果你继承自某些既有的classes,你就受到那些classes的设计的束缚,特别是受到“它们的函数是virtual或non-virtual”的影响。如果你允许其他classes继承你的class,那会影响你所声明的函数——尤其 是析构函数——是否为virtual。</li>
+<li><strong>你的新type需要什么样的转换?</strong> 你的type生存于其他types之间,因而彼此该有转换行为吗?如果你希望允许类型T1之物被隐式转换为类型T2之物，就必须在class T1内写一个类型转换函数(operator T2) 或在class T2内写一个non-explicit-one-argument(可被单一实参调用)的构造函数。如果你只允许explicit构造函数存在，就得写出专门负责执行转换的函数，且不得为类型转换操作符(typeconversion operators)或non-explicit-one -argument构造函数。</li>
+<li><strong>什么样的操作符和函数对此新type而言是合理的?</strong> 这个问题的答案决定你将为你的class声明哪些函数。其中某些该是member函数,某些则否。</li>
+<li><strong>什么样的标准函数应该驳回?</strong> 那些正是你必须声明为private者(或=delete)。</li>
+<li><strong>谁该取用新type的成员?</strong> 这个提问可以帮助你决定哪个成员为public，哪个为protected，哪个为private。它也帮助你决定哪一个classes和/或functions应该是friends,以及将它们嵌套于另一个之内是否合理。</li>
+<li><strong>什么是新type的“未声明接口”?</strong> 它对效率、异常安全性以及资源运用(例如多任务锁定和动态内存)提供何种保证?你在这些方面提供的保证将为你的class实现代码加上相应的约束条件。(不太理解)</li>
+<li><strong>你的新type有多么一般化?</strong> 或许你其实并非定义一个新type,而是定义一整个types家族。果真如此你就不该定义一个新class, 而是应该定义一个新的class template。</li>
+<li><strong>你真的需要一个新type吗?</strong> 如果只是定义新的derived class以便为既有的class添加机能，那么说不定单纯定义一或多个non-member函数或templates，更能够达到目标。</li>
+<li><strong>设计一个类之前，请考虑本条款覆盖的所有讨论主题。</strong></li>
+</ul>
+<h2 id="宁以传递一个const引用-pass-by-reference-to-const-替换传递值-pass-by-value"><a href="#宁以传递一个const引用-pass-by-reference-to-const-替换传递值-pass-by-value" class="headerlink" title="宁以传递一个const引用(pass-by-reference-to-const)替换传递值(pass-by-value)"></a>宁以传递一个const引用(pass-by-reference-to-const)替换传递值(pass-by-value)</h2><p>缺省情况下C++以传值的方式传递对象至函数，这通常会调用对象的拷贝方法。这样的方式传递参数会多调用一次拷贝构造函数，不仅费时而且费空间。相比起来传递const引用就非常高效了，而且这避免了传递值时拷贝时可能出现的对象切割问题。</p>
+<blockquote>
+<p>对象切割指的是这样一种情况：当函数新参类型是基类，而实参是派生类时，在函数内部调用对象的方法始终指向基类的方法，而我们想要的原本是派生类的方法。</p>
+</blockquote>
+<p><strong>请记住</strong></p>
+<ul>
+<li>尽量以传递const引用替换传递值。前者通常比较高效,并可避免切割问题。</li>
+<li>以上规则并不适用于内置类型，以及STL的迭代器和函数对象。对它们而言，传递值往往比较适当。</li>
+</ul>
+<h2 id="必须返回对象时，别妄想返回其引用"><a href="#必须返回对象时，别妄想返回其引用" class="headerlink" title="必须返回对象时，别妄想返回其引用"></a>必须返回对象时，别妄想返回其引用</h2><p>本条款书中以operator*为例，这种重载函数必定是返回一个值的，返回引用或指针会在其他操作时出大问题。</p>
+<p><strong>请记住</strong></p>
+<ul>
+<li>绝对不要返回一个指向局部变量(存储于stack中)的指针或引用，或返回一个指向本地static对象的指针或引用(后者造成大家的返回值都指向同一对象)。</li>
+</ul>
+<h2 id="将成员变量声明为private"><a href="#将成员变量声明为private" class="headerlink" title="将成员变量声明为private"></a>将成员变量声明为private</h2><p>这样做的好处是为了封装，基本上封装的好处就是本条款的好处：</p>
+<ul>
+<li>提高代码安全性</li>
+<li>提高代码复用性</li>
+<li>高内聚</li>
+<li>低耦合</li>
+</ul>
+<p><strong>请记住</strong></p>
+<ul>
+<li>切记将成员变量声明为private。这可赋予客户访问数据的一致性 、可细微划分访问控制、允诺约束条件获得保证，并提供class作者以充分的实现弹性。</li>
+<li>protected并不比public更具封装性。</li>
+</ul>
+<h2 id="宁以non-member、non-friend替换member函数"><a href="#宁以non-member、non-friend替换member函数" class="headerlink" title="宁以non-member、non-friend替换member函数"></a>宁以non-member、non-friend替换member函数</h2><p>首先有这样一个例子，这个class表示网页浏览器：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">WebBrowser</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    ...</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">clearCache</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">clearHistory</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">removeCookies</span><span class="params">()</span></span>;</span><br><span class="line">    ...</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>有用户想执行所有这些动作，因此有这样一个函数：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">WebBrowser</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    ...</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">clearEverything</span><span class="params">()</span></span>; <span class="comment">// 调用上面3个函数</span></span><br><span class="line">    ...</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>当然也可以由一个non-member函数完成：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">clearBrowser</span><span class="params">(WebBrowser&amp; wb)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    wb.clearCache();</span><br><span class="line">    wb.clearHistory();</span><br><span class="line">    wb.removeCookies();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>两个版本的对比起来，由于clearBrowser为代表的non-member和non-frewnd函数提供更少的成员可见性，因此它们具有更好的封装性。当然，这样的non-member和non-frewnd函数可以是其他类的member。</p>
+<p>在C++中，为了实现上述目的，通常使用namespace：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">namespace</span> WebBrowserStuff &#123;</span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">WebBrowser</span> &#123;</span> ... &#125;;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">clearBrowser</span><span class="params">(WebBrowser&amp; wb)</span></span>;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>namespace不同于class，它能跨越多个源码文件，方便未来更新整合。</p>
+<p><strong>请记住</strong></p>
+<ul>
+<li>宁可拿non-member或non-friend函数替换member函数。这样做可以增加封装性、包裹弹性(packaging flexibility)和机能扩充性。</li>
+</ul>
+<h2 id="若所有参数皆需类型转换，请为此采用non-member函数"><a href="#若所有参数皆需类型转换，请为此采用non-member函数" class="headerlink" title="若所有参数皆需类型转换，请为此采用non-member函数"></a>若所有参数皆需类型转换，请为此采用non-member函数</h2><p>本节所举例子是重载一个类的乘法运算符，如果这个重载函数是member函数，那么当第一个参数是诸如int类型的就无法通过编译(当第二个参数是有可能会通过，编译器会自动用第二个参数构造一个临时的该类变量参与运算)。</p>
+<p>解决方法是首先构造函数刻意不为explicit的，然后该重载是一个non-member函数。</p>
+<p><strong>请记住</strong></p>
+<ul>
+<li>如果你需要为某个函数的所有参数(包括被this指针所指的那个隐喻参数)进行类型转换，那么这个函数必须是个non-member。</li>
+</ul>
+<h2 id="考虑写出一个不抛异常的swap函数"><a href="#考虑写出一个不抛异常的swap函数" class="headerlink" title="考虑写出一个不抛异常的swap函数"></a>考虑写出一个不抛异常的swap函数</h2><p>首先，如果swap的缺省实现码对你的class或class template 提供可接受的效率，你不需要额外做任何事。</p>
+<p>如果swap缺省实现版的效率不足，那要做以下事：</p>
+<ol>
+<li>提供一个public swap成员函数,让它高效地置换你的类型的两个对象值。稍后我将解释，这个函数绝不该抛出异常。</li>
+<li>在你的class或template所在的命名空间内提供一个non-member swap，并令它调用上述swap成员函数。</li>
+<li>如果你正编写一个class(而非class template)，为你的class特化std::swap，并令它调用你的swap成员函数。</li>
+<li>最后，如果你调用swap，请确定包含一个using声明式，以便让std::swap在你的函数内曝光可见，然后不加任何namespace修饰符，赤裸裸地调用swap。</li>
+</ol>
+<h1 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h1><h2 id="尽可能延后变量定义式的出现时间"><a href="#尽可能延后变量定义式的出现时间" class="headerlink" title="尽可能延后变量定义式的出现时间"></a>尽可能延后变量定义式的出现时间</h2><p>尽量延后变量定义式的出现时间，因为有可能在此之前抛出异常之类的，这样就减少了消耗成本。而且最好定义式的出现使用构造函数而非使用=进行赋值(因为=赋值之前要进行一次默认构造函数)。</p>
+<p><strong>请记住</strong></p>
+<ul>
+<li>尽可能延后变量定义式的出现，这样做可增加程序的清晰度并改善程序效率。</li>
+</ul>
+<h2 id="尽量少做转型动作"><a href="#尽量少做转型动作" class="headerlink" title="尽量少做转型动作"></a>尽量少做转型动作</h2><p>C++提供四种新式转型：</p>
+<ul>
+<li>const_cast<T>( expression )</li>
+</ul>
+<p>通常被用来将对象的常量性转除。它也是唯一有此能力的C++-style转型操作符。</p>
+<ul>
+<li>dynamic_cast<T>( expression ) </li>
+</ul>
+<p>主要用来执行“安全向下转型”，也就是用来决定某对象是否归属继承体系中的某个类型。它是唯一无法由旧式语法执行的动作，也是唯一可能耗费重大运行成本的转型动作。</p>
+<ul>
+<li>reinterpret_cast<T>( expression )</li>
+</ul>
+<p>意图执行低级转型，实际动作(及结果)可能取决于编译器，这也就表示它不可移植。例如将一个pointer to int转型为一个int。这一类转型在低级代码以外很少见。本书只使用一次,那是在讨论如何针对原始内存写出一个调试用的分配器时，见条款50。</p>
+<ul>
+<li>static_cast<T>( expression )</li>
+</ul>
+<p>用来强迫隐式转换，例如将non-const对象转为const对象(就像条款3所为)，或将int转为double等等。它也可以用来执行上述多种转换的反向转换，例如将void* 指针转为typed 指针，将pointer-tobase转为pointer-to-derived。 但它无法将const转为non-const——这个只有const_cast才办得到。</p>
+<p><strong>请记住</strong></p>
+<ul>
+<li>如果可以，尽量避免转型，特别是在注重效率的代码中避免dynamic_casts。如果有个设计需要转型动作，试着发展无需转型的替代设计。</li>
+<li>如果转型是必要的，试着将它隐藏于某个函数背后。客户随后可以调用该函数, 而不需将转型放进他们自己的代码内。</li>
+</ul>
+<h2 id="避免返回handles指向对象内部成分"><a href="#避免返回handles指向对象内部成分" class="headerlink" title="避免返回handles指向对象内部成分"></a>避免返回handles指向对象内部成分</h2><p>通常我们认为，对象的“内部”就是指它的成员变量，但其实不被公开使用的成员函数(也就是被声明为protected或private 者)也是对象“内部”的一部分。因此也应该留心不要返回它们的handles。这意味你绝对不该令成员函数返回一个指针指向“访问级别较低”的成员函数。如果你那么做，后者的实际访问级别就会提高如同前者(访问级别较高者)，因为客户可以取得一个指针指向那个“访问级别较低”的函数，然后通过那个指针调用它。</p>
+<p><strong>请记住</strong></p>
+<ul>
+<li>避免返回handles(包括references、指针、迭代器)指向对象内部。遵守这个条款可增加封装性，帮助const成员函数的行为像个const,并将发生“虚吊号码牌”(dangling handles)的可能性降至最低。</li>
+</ul>
+<h2 id="为“异常安全”而努力是值得的"><a href="#为“异常安全”而努力是值得的" class="headerlink" title="为“异常安全”而努力是值得的"></a>为“异常安全”而努力是值得的</h2><p>当异常被抛出时，带有异常安全性的函数会:</p>
+<ul>
+<li><strong>不泄漏任何资源。</strong></li>
+<li><strong>不允许数据败坏。</strong></li>
+</ul>
+<p>异常安全函数提供以下三个保证之一 :</p>
+<ul>
+<li><strong>基本承诺</strong>：如果异常被抛出，程序内的任何事物仍然保持在有效状态下。没有任何对象或数据结构会因此而败坏，所有对象都处于一种内部前后一致的状态(例如所有的class约束条件都继续获得满足)。然而程序的现实状态(exactstate)恐怕不可预料。举个例子,我们可以撰写changeBackground使得一旦有异常被抛出时，PrettyMenu对象可以继续拥有原背景图像，或是令它拥有某个缺省背景图像，但客户无法预期哪-种情况。如果想知道，他们恐怕必须调用某个成员函数以得知当时的背景图像是什么。</li>
+<li><strong>强烈保证</strong>：如果异常被抛出，程序状态不改变。调用这样的函数需有这样的认知:如果函数成功，就是完全成功，如果函数失败，程序会回复到“调用函数之前”的状态。</li>
+<li><strong>不抛掷保证</strong>，承诺绝不抛出异常，因为它们总是能够完成它们原先承诺的功能。作用于内置类型(例如ints,，指针等等)身上的所有操作都提供nothrow保证。这是异常安全码中一个必不可少的关键基础材料。</li>
+</ul>
+<p><strong>请记住</strong></p>
+<ul>
+<li>异常安全函数(Exception-safefunctions)即使发生异常也不会泄漏资源或允许任何数据结构败坏。这样的函数区分为三种可能的保证:基本型、强烈型、不抛异常型。</li>
+<li>“强烈保证”往往能够以copy-and-swap实现出来，但“强烈保证”并非对所有函数都可实现或具备现实意义。</li>
+<li>函数提供的“异常安全保证”通常最高只等于其所调用之，各个函数的“异常安全保证”中的最弱者。简单来说，就是系统中如果有函数完全没有异常安全保证，那么整个系统也谈不上异常安全。</li>
+</ul>
+<h2 id="透彻了解inlining的里里外外"><a href="#透彻了解inlining的里里外外" class="headerlink" title="透彻了解inlining的里里外外"></a>透彻了解inlining的里里外外</h2><p>要记住inline是针对编译器的策略，如果不是非常小巧的函数，没必要声明为inline的。</p>
+<p><strong>请记住</strong></p>
+<ul>
+<li>将大多数inlining限制在小型、被频繁调用的函数身上。这可使日后的调试过程和二进制升级更容易，也可使潜在的代码膨胀问题最小化，使程序的速度提升机会最大化。</li>
+<li>不要只因为function templates出现在头文件，就将它们声明为inline。</li>
+</ul>
+<h2 id="将文件间的编译依存关系降至最低"><a href="#将文件间的编译依存关系降至最低" class="headerlink" title="将文件间的编译依存关系降至最低"></a>将文件间的编译依存关系降至最低</h2><p><strong>请记住</strong></p>
+<ul>
+<li>支持“编译依存性最小化”的一般构想是：相依于声明式，不要相依于定义式。基于此构想的两个手段是Handle classes和Interface classes。</li>
+<li>程序库头文件应该以“完全且仅有声明式”(full and declaration-only forms)的形式存在。这种做法不论是否涉及templates都适用。</li>
+</ul>
+<h1 id="继承与面向对象设计"><a href="#继承与面向对象设计" class="headerlink" title="继承与面向对象设计"></a>继承与面向对象设计</h1><h2 id="确定你的public继承塑模出is-a关系"><a href="#确定你的public继承塑模出is-a关系" class="headerlink" title="确定你的public继承塑模出is-a关系"></a>确定你的public继承塑模出is-a关系</h2><p>is-a大致意思就是，derived类必定有base类的所有行为，而且derived类属于一种base类(更加特殊化的base类)。</p>
+<p><strong>请记住</strong></p>
+<ul>
+<li>“public继承”意味is-a。适用于base classes身上的每一件事情一定也适用于derived classes身上，因为每一个derived class对象也都是一个base class对象。</li>
+</ul>
+<h2 id="避免遮掩继承而来的名称"><a href="#避免遮掩继承而来的名称" class="headerlink" title="避免遮掩继承而来的名称"></a>避免遮掩继承而来的名称</h2><p><strong>请记住</strong></p>
+<ul>
+<li>derived classes内的名称会遮掩base classes内的名称。在public继承下从来没有人希望如此。</li>
+<li>为了让被遮掩的名称再见天日，可使用using声明式。</li>
+</ul>
+<h2 id="区分接口继承和实现继承"><a href="#区分接口继承和实现继承" class="headerlink" title="区分接口继承和实现继承"></a>区分接口继承和实现继承</h2><p><strong>请记住</strong></p>
+<ul>
+<li>接口继承和实现继承不同。在public继承之下，derived classes总是继承base class的接口。</li>
+<li>pure virtual函数只具体指定接口继承。</li>
+<li>impure virtual函数具体指定接口继承及缺省实现继承。</li>
+<li>non-virtual函数具体指定接口继承以及强制性实现继承。</li>
+</ul>
+<h2 id="考虑virtual函数以外的其他选择"><a href="#考虑virtual函数以外的其他选择" class="headerlink" title="考虑virtual函数以外的其他选择"></a>考虑virtual函数以外的其他选择</h2><p>没看懂，有空再补一下。</p>
+<h2 id="绝不重新定义继承而来的non-virtual函数"><a href="#绝不重新定义继承而来的non-virtual函数" class="headerlink" title="绝不重新定义继承而来的non-virtual函数"></a>绝不重新定义继承而来的non-virtual函数</h2><p>尽管这种行为是编译器允许的，但这样操作会与is-a关系冲突。</p>
+<p><strong>请记住</strong></p>
+<ul>
+<li>绝对不要重新定义继承而来的non-virtual函数。</li>
+</ul>
+<h2 id="绝不重新定义继承而来的缺省参数值"><a href="#绝不重新定义继承而来的缺省参数值" class="headerlink" title="绝不重新定义继承而来的缺省参数值"></a>绝不重新定义继承而来的缺省参数值</h2><p><strong>请记住</strong></p>
+<ul>
+<li>绝对不要重新定义一个继承而来的缺省参数值，因为缺省参数值是静态绑定的，而virtual函数却是动态绑定的。</li>
+</ul>
+<h2 id="通过复合塑膜出has-a或“根据某物实现出”"><a href="#通过复合塑膜出has-a或“根据某物实现出”" class="headerlink" title="通过复合塑膜出has-a或“根据某物实现出”"></a>通过复合塑膜出has-a或“根据某物实现出”</h2><p>复合(即包含其他类的成员的类)代表着一种has-a关系。</p>
+<p><strong>请记住</strong></p>
+<ul>
+<li>复合(has-a)的意义与public继承(is-a)完全不同。</li>
+<li>在应用域，复合意味着has-a，在实现域，复合意味着is-implemented-in-terms-of(根据某物实现出)。</li>
+</ul>
+<h2 id="明智而审慎地使用private继承"><a href="#明智而审慎地使用private继承" class="headerlink" title="明智而审慎地使用private继承"></a>明智而审慎地使用private继承</h2><p>private继承意味着implemented-in-terms-of(根据某物实现出)(并非is-a)，意味着只有实现部分被继承，接口部分略去。由于复合同样意味着根据某物实现出，取舍时尽量选择复合，必要时才用private继承(必要时指的是当有protected成员或virtual函数牵扯进来时)。</p>
+<p>private继承相当于把接口隐藏起来了，不让客户随意调用。我想要private继承一个类，完全是因为馋这个类的一些实现罢了，而并不想与这个类有过多关系。然而private继承通常可以被一个publick继承地private成员所替代。例如一个计时器类：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Timer</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">explicit</span> <span class="title">Timer</span><span class="params">(<span class="keyword">int</span> tickFrequency)</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">onTick</span><span class="params">()</span> <span class="keyword">const</span></span>; <span class="comment">// 定时器每滴答一次此函数就被调用一次</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>为了让Widget重新定义Timer内地virtual函数，Widget需要继承自Timer。但客户不应该对着一个Widget调用onTick，因此使用private继承：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Widget</span> :</span> <span class="keyword">private</span> Timer &#123; </span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">onTick</span><span class="params">()</span> <span class="keyword">const</span></span>; <span class="comment">// 查看Widget地数据等等</span></span><br><span class="line">    ...</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>但通常来说，还可以用复合来解决，而且更加通用：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Widget</span> &#123;</span> </span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">WidgetTimer</span> :</span> <span class="keyword">public</span> Timer &#123;</span><br><span class="line">    <span class="keyword">public</span>:</span><br><span class="line">        <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">onTick</span><span class="params">()</span> <span class="keyword">const</span></span>;</span><br><span class="line">        ...   </span><br><span class="line">    &#125;;</span><br><span class="line">    WidgetTimer timer;</span><br><span class="line">    ...</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>这样做有什么好处呢？首先这阻止了Widget的派生类重新定义virtual函数，其次这样应该会少使用一个Timer.h头文件，降低编译依存性。</p>
+<p>当然private继承不是一无是处，在非常“极端”的情况下还是可以使用的。书中举了例子(与EBO，empty base optimization有关)，由于比较少见就不做记录了。</p>
+<p><strong>请记住</strong></p>
+<ul>
+<li>private继承意味着implemented-in-terms-of(根据某物实现出)。他常比复合的级别低。但当派生类需要访问protected基类的成员，或要重新定义继承而来的virtual函数时，这样的设计是合理的。</li>
+</ul>
+<h2 id="明智而审慎地使用多重继承"><a href="#明智而审慎地使用多重继承" class="headerlink" title="明智而审慎地使用多重继承"></a>明智而审慎地使用多重继承</h2><p>多重继承指一个类继承自多个类，但这样可能会遇上多个基类中出现同名函数的问题。如果不能达到最佳匹配，那么必须要明确指出是调用的哪个基类中的函数。(后面还有很多，感觉不常用没怎么看)</p>
+<p><strong>请记住</strong></p>
+<ul>
+<li>多重继承比单一继承复杂，它可能导致新的歧义性，以及对virtual继承的需要。</li>
+<li>virtual继承会增加大小、速度、初始化及赋值复杂度成本等。若virtual的基类不带任何数据，这将是最具有价值的。</li>
+<li>多重继承的确有正当用途。其中一个情节涉及“public继承某个Interface class”和“private继承某个协助实现的class”的两相组合。</li>
+</ul>
+<h1 id="模板与泛型编程"><a href="#模板与泛型编程" class="headerlink" title="模板与泛型编程"></a>模板与泛型编程</h1><h2 id="了解隐式接口和编译器多态"><a href="#了解隐式接口和编译器多态" class="headerlink" title="了解隐式接口和编译器多态"></a>了解隐式接口和编译器多态</h2><p>面向对象世界中总是以显式接口和运行期多态(如针对virtual函数)解决问题。而Template及泛型编程中恰恰相反，隐式接口和编译期多态更重要。</p>
+<p><strong>请记住</strong></p>
+<ul>
+<li>classes和templates都支持接口和多态。</li>
+<li>对class而言接口是显式的，以函数签名为中心。多态是通过virtual函数发生于运行期。</li>
+<li>对template而言，接口是隐式的，基于有效表达式。多态则是通过template具现化和函数重载解析发生于编译期。</li>
+</ul>
+<h2 id="了解typename的双重意义"><a href="#了解typename的双重意义" class="headerlink" title="了解typename的双重意义"></a>了解typename的双重意义</h2><p>在template的声明中：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="class"><span class="keyword">class</span> <span class="title">T</span>&gt; <span class="title">class</span> <span class="title">Widget</span>;</span></span><br><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt; <span class="class"><span class="keyword">class</span> <span class="title">Widget</span>;</span></span><br></pre></td></tr></table></figure>
+
+<p>class与typename没有什么不同。在以下的代码段中：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> C&gt;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">print2nd</span><span class="params">(<span class="keyword">const</span> C&amp; container)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (container.size() &gt;= <span class="number">2</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="function"><span class="keyword">typename</span> C::const_iterator <span class="title">iter</span><span class="params">(container.begin())</span></span>;</span><br><span class="line">        ...</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>(针对{}作用域中诸如C::const_iterator的嵌套从属类型)第6行的typename需要被添加，否则const_iterator可能会被当作一个成员变量(我们的本意是const_iterator是一个类型)。</p>
+<p><strong>请记住</strong></p>
+<ul>
+<li>声明template参数时，前缀关键字class和typename可互换。</li>
+<li>请使用关键字typename标识嵌套从属类型名称；但不得在base class lists或member initialization list内以它作为base class修饰符。</li>
+</ul>
+<h2 id="学习处理模板化基类内的名称"><a href="#学习处理模板化基类内的名称" class="headerlink" title="学习处理模板化基类内的名称"></a>学习处理模板化基类内的名称</h2><p><strong>请记住</strong></p>
+<ul>
+<li>可在derived class templates内通过“this-&gt;”指涉base class templates内的成员名称，或籍由一个明白写出的“base class资格修饰符”完成。</li>
+</ul>
+<h2 id="将与参数无关的代码抽离templates"><a href="#将与参数无关的代码抽离templates" class="headerlink" title="将与参数无关的代码抽离templates"></a>将与参数无关的代码抽离templates</h2><p>因为template在被使用时会被具现化，所以可能会导致代码碰撞。为了避免这样的局面，我们要牢记共性与变性分析。<br>…</p>
+<p><strong>请记住</strong></p>
+<ul>
+<li>templates生成多个classes和多个函数，所以任何template代码都不该与某个造成膨胀的template参数产生相依关系。</li>
+<li>因非类型模板参数而造成的代码膨胀，往往可以消除，做法是以函数参数或class成员变量替换template参数。</li>
+<li>因类型参数而造成的代码碰撞，往往可降低。做法是让带有完全相同的二进制表述的具现类型共享实现码。</li>
+</ul>
+<h2 id="运用成员函数模板接受所有兼容类型"><a href="#运用成员函数模板接受所有兼容类型" class="headerlink" title="运用成员函数模板接受所有兼容类型"></a>运用成员函数模板接受所有兼容类型</h2><p><strong>请记住</strong></p>
+<ul>
+<li>请使用member function template生成“可接受所有兼容类型”的函数(泛化的成员函数)。</li>
+<li>如果你声明member template用于“泛化copy构造”或“泛化assignment操作”，你还是需要声明正常的copy构造和assignment操作。</li>
+</ul>
+<h2 id="需要类型转换时请为模板定义非成员函数"><a href="#需要类型转换时请为模板定义非成员函数" class="headerlink" title="需要类型转换时请为模板定义非成员函数"></a>需要类型转换时请为模板定义非成员函数</h2><p><strong>请记住</strong></p>
+<ul>
+<li>当我们编写一个class template，而它所提供之“与此template相关的”函数支持“所有参数之隐式类型转换”时，请将那些函数定义为“class template内部的friend函数”。</li>
+</ul>
+<h2 id="请使用traits-classes表现类型信息"><a href="#请使用traits-classes表现类型信息" class="headerlink" title="请使用traits classes表现类型信息"></a>请使用traits classes表现类型信息</h2><p>这一条款有很多关于编译期间的细节，为了C++提升可以细看。</p>
+<p><strong>请记住</strong></p>
+<ul>
+<li>Traits classes使得“类型相关信息”在编译期可用。它们以template和“template特化”完成实现。</li>
+<li>整个重载技术后，traits classes有可能在<strong>编译期</strong>对类型执行if…else测试。</li>
+</ul>
+<h2 id="认识template元编程"><a href="#认识template元编程" class="headerlink" title="认识template元编程"></a>认识template元编程</h2><p>Template metaprogramming(TMP，模板元编程)是编写template-based C++程序并<strong>执行于编译期</strong>的过程。</p>
+<p>这一部分属于C++黑魔法，就不过多记录了。</p>
+<h1 id="定制new和delete"><a href="#定制new和delete" class="headerlink" title="定制new和delete"></a>定制new和delete</h1><h2 id="了解new-handler行为"><a href="#了解new-handler行为" class="headerlink" title="了解new-handler行为"></a>了解new-handler行为</h2><p><strong>请记住</strong></p>
+<ul>
+<li>set-new-handler允许客户指定一个函数，在内存分配无法获得满足时被调用。</li>
+<li>Nothrow new是一个颇为局限的工具，因它只适用于内存分配；后续的构造函数调用还是可能抛出异常。</li>
+</ul>
+<h2 id="了解new和delete的合理替换时机"><a href="#了解new和delete的合理替换时机" class="headerlink" title="了解new和delete的合理替换时机"></a>了解new和delete的合理替换时机</h2><p><strong>请记住</strong></p>
+<ul>
+<li>有许多理由需要写个自定的new和delete，包括改善效能、对heap运用错误进行调试、收集heap使用信息。</li>
+</ul>
+<h2 id="编写new和delete时需固守常规"><a href="#编写new和delete时需固守常规" class="headerlink" title="编写new和delete时需固守常规"></a>编写new和delete时需固守常规</h2><p><strong>请记住</strong></p>
+<ul>
+<li>operator new应该内含一个无穷循环，并在其中尝试分配内存，如果它无法满足内存需求，就该调用new-handler。它也应该能处理0 byte申请。Class专属版本还应该处理“比正确大小更大的(错误)申请”。</li>
+<li>operator delete应该在收到null指针时不做任何事情。Class专属版本则还应该处理“比正确大小更大的(错误)申请”。</li>
+</ul>
+<h2 id="写了placement-new也要写placement-delete"><a href="#写了placement-new也要写placement-delete" class="headerlink" title="写了placement new也要写placement delete"></a>写了placement new也要写placement delete</h2><p>当一个new表达式长这样：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Widget* pw = <span class="keyword">new</span> Widget;</span><br></pre></td></tr></table></figure>
+
+<p>此时有两个函数被调用了。一个是用以分配内存的operator new，另一个是Widget的默认构造函数。若operator new的参数处理一定会有的哪个size_t之外还有其他的，那么这便是一个placement new。而要求placement new和placement delete成对出现的理由是，避免运行了求placement new后发现需要取消new(如第二步的构造出了错)时找不到对应的delete。</p>
+<p><strong>请记住</strong></p>
+<ul>
+<li>当你写一个placement operator new，请确定也写出了对应的placement operator delete。如果没有这样做，你的程序可能会发生隐微而时断时续的内存泄漏。</li>
+<li>当你声明placement new和placement delete，请确定不要无意识(非故意)地遮掩了它们的正常版本。</li>
+</ul>
+<h1 id="杂项讨论"><a href="#杂项讨论" class="headerlink" title="杂项讨论"></a>杂项讨论</h1><h2 id="不要轻忽编译器的警告"><a href="#不要轻忽编译器的警告" class="headerlink" title="不要轻忽编译器的警告"></a>不要轻忽编译器的警告</h2><p><strong>请记住</strong></p>
+<ul>
+<li>严肃对待编译器发出的警告信息。努力在你的编译器的最高(最严苛)警告级别下争取“无任何警告”的荣誉。</li>
+<li>不要过度倚赖编译器的报警能力，因为不同的编译器对待事情的态度并不相同。一旦移植到另一个编译器上，你原本倚赖的警告信息有可能消失。</li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Leroy</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://leroy3.xyz/2021/03/27/Effective-C-%E7%AC%94%E8%AE%B0/">https://leroy3.xyz/2021/03/27/Effective-C-笔记/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://leroy3.xyz" target="_blank">Be Your Leroy</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/C/">C++</a></div><div class="post_share"><div class="social-share" data-image="https://z3.ax1x.com/2021/06/11/2WvzE4.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2021/05/29/const%20%E7%9B%B8%E5%85%B3%E6%80%BB%E7%BB%93/"><img class="prev-cover" src="https://z3.ax1x.com/2021/06/11/2WvjDU.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">const 相关总结</div></div></a></div><div class="next-post pull-right"><a href="/2020/11/24/C++%20%E5%AD%A6%E4%B9%A0%E8%B7%AF%E7%BA%BF/"><img class="next-cover" src="https://z3.ax1x.com/2021/06/11/2WvHCn.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">C++ 学习路线</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2020/11/24/C++ 学习路线/" title="C++ 学习路线"><img class="cover" src="https://z3.ax1x.com/2021/06/11/2WvHCn.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2020-11-24</div><div class="title">C++ 学习路线</div></div></a></div><div><a href="/2021/06/28/C++ 中的声明与定义/" title="C++ 中的声明与定义"><img class="cover" src="https://z3.ax1x.com/2021/06/28/Rt0puT.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-28</div><div class="title">C++ 中的声明与定义</div></div></a></div><div><a href="/2021/05/29/const 相关总结/" title="const 相关总结"><img class="cover" src="https://z3.ax1x.com/2021/06/11/2WvjDU.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-05-29</div><div class="title">const 相关总结</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-info-avatar is-center"><img class="avatar-img" src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">Leroy</div><div class="author-info__description"></div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">11</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">5</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">3</div></a></div></div><a class="button--animated" id="card-info-btn"><i class="fab fa-github"></i><span>Enjoy Yourself</span></a></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%AE%A9%E8%87%AA%E5%B7%B1%E4%B9%A0%E6%83%AFC"><span class="toc-number">1.</span> <span class="toc-text">让自己习惯C++</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A7%86C-%E4%B8%BA%E4%B8%80%E4%B8%AA%E8%AF%AD%E8%A8%80%E8%81%94%E9%82%A6"><span class="toc-number">1.1.</span> <span class="toc-text">视C++为一个语言联邦</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B0%BD%E9%87%8F%E4%BB%A5-const-enum-inline-%E6%9B%BF%E6%8D%A2-define"><span class="toc-number">1.2.</span> <span class="toc-text">尽量以 const, enum, inline 替换 #define</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B0%BD%E5%8F%AF%E8%83%BD%E4%BD%BF%E7%94%A8const"><span class="toc-number">1.3.</span> <span class="toc-text">尽可能使用const</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A1%AE%E5%AE%9A%E5%AF%B9%E8%B1%A1%E8%A2%AB%E4%BD%BF%E7%94%A8%E5%89%8D%E5%B7%B2%E5%85%88%E8%A2%AB%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="toc-number">1.4.</span> <span class="toc-text">确定对象被使用前已先被初始化</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9E%84%E9%80%A0-%E6%9E%90%E6%9E%84-%E8%B5%8B%E5%80%BC%E8%BF%90%E7%AE%97"><span class="toc-number">2.</span> <span class="toc-text">构造&#x2F;析构&#x2F;赋值运算</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%86%E8%A7%A3C-%E9%BB%98%E9%BB%98%E7%BC%96%E5%86%99%E5%B9%B6%E8%B0%83%E7%94%A8%E5%93%AA%E4%BA%9B%E5%87%BD%E6%95%B0"><span class="toc-number">2.1.</span> <span class="toc-text">了解C++默默编写并调用哪些函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%8B%A5%E4%B8%8D%E6%83%B3%E4%BD%BF%E7%94%A8%E7%BC%96%E8%AF%91%E5%99%A8%E8%87%AA%E5%8A%A8%E7%94%9F%E6%88%90%E7%9A%84%E5%87%BD%E6%95%B0%EF%BC%8C%E5%B0%B1%E5%BA%94%E8%AF%A5%E6%98%8E%E7%A1%AE%E6%8B%92%E7%BB%9D"><span class="toc-number">2.2.</span> <span class="toc-text">若不想使用编译器自动生成的函数，就应该明确拒绝</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BA%E5%A4%9A%E6%80%81%E5%9F%BA%E7%B1%BB%E5%A3%B0%E6%98%8Evirtual%E6%9E%90%E6%9E%84%E5%87%BD%E6%95%B0"><span class="toc-number">2.3.</span> <span class="toc-text">为多态基类声明virtual析构函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%AB%E8%AE%A9%E5%BC%82%E5%B8%B8%E9%80%83%E7%A6%BB%E6%9E%90%E6%9E%84%E5%87%BD%E6%95%B0"><span class="toc-number">2.4.</span> <span class="toc-text">别让异常逃离析构函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%9D%E4%B8%8D%E5%86%8D%E6%9E%84%E9%80%A0%E5%92%8C%E6%9E%90%E6%9E%84%E8%BF%87%E7%A8%8B%E4%B8%AD%E8%B0%83%E7%94%A8virtual%E5%87%BD%E6%95%B0"><span class="toc-number">2.5.</span> <span class="toc-text">绝不再构造和析构过程中调用virtual函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%A4operator-%E8%BF%94%E5%9B%9E%E4%B8%80%E4%B8%AA-this%E7%9A%84%E5%BC%95%E7%94%A8"><span class="toc-number">2.6.</span> <span class="toc-text">令operator&#x3D;返回一个*this的引用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9C%A8operator-%E4%B8%AD%E5%A4%84%E7%90%86%E2%80%9C%E8%87%AA%E6%88%91%E8%B5%8B%E5%80%BC%E2%80%9D"><span class="toc-number">2.7.</span> <span class="toc-text">在operator&#x3D;中处理“自我赋值”</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%8D%E5%88%B6%E5%AF%B9%E8%B1%A1%E6%97%B6%E5%8B%BF%E5%BF%98%E5%85%B6%E6%AF%8F%E4%B8%80%E4%B8%AA%E6%88%90%E5%88%86"><span class="toc-number">2.8.</span> <span class="toc-text">复制对象时勿忘其每一个成分</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%B5%84%E6%BA%90%E7%AE%A1%E7%90%86"><span class="toc-number">3.</span> <span class="toc-text">资源管理</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%A5%E5%AF%B9%E8%B1%A1%E7%AE%A1%E7%90%86%E8%B5%84%E6%BA%90"><span class="toc-number">3.1.</span> <span class="toc-text">以对象管理资源</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9C%A8%E8%B5%84%E6%BA%90%E7%AE%A1%E7%90%86%E4%B8%AD%E5%BF%83%E4%B8%AD%E5%B0%8F%E5%BF%83%E6%8B%B7%E8%B4%9D%E8%A1%8C%E4%B8%BA"><span class="toc-number">3.2.</span> <span class="toc-text">在资源管理中心中小心拷贝行为</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9C%A8%E8%B5%84%E6%BA%90%E7%AE%A1%E7%90%86%E7%B1%BB%E4%B8%AD%E6%8F%90%E4%BE%9B%E5%AF%B9%E5%8E%9F%E5%A7%8B%E8%B5%84%E6%BA%90%E7%9A%84%E8%AE%BF%E9%97%AE"><span class="toc-number">3.3.</span> <span class="toc-text">在资源管理类中提供对原始资源的访问</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%88%90%E5%AF%B9%E4%BD%BF%E7%94%A8new%E5%92%8Cdelete%E6%97%B6%E8%A6%81%E9%87%87%E7%94%A8%E7%9B%B8%E5%90%8C%E5%BD%A2%E5%BC%8F"><span class="toc-number">3.4.</span> <span class="toc-text">成对使用new和delete时要采用相同形式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%A5%E7%8B%AC%E7%AB%8B%E8%AF%AD%E5%8F%A5%E5%B0%86newed%E5%AF%B9%E8%B1%A1%E7%BD%AE%E5%85%A5%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88"><span class="toc-number">3.5.</span> <span class="toc-text">以独立语句将newed对象置入智能指针</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%A3%B0%E6%98%8E"><span class="toc-number">4.</span> <span class="toc-text">设计与声明</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%A9%E6%8E%A5%E5%8F%A3%E5%AE%B9%E6%98%93%E8%A2%AB%E6%AD%A3%E7%A1%AE%E4%BD%BF%E7%94%A8%EF%BC%8C%E4%B8%8D%E6%98%93%E8%A2%AB%E8%AF%AF%E7%94%A8"><span class="toc-number">4.1.</span> <span class="toc-text">让接口容易被正确使用，不易被误用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%BE%E8%AE%A1class%E7%8A%B9%E5%A6%82%E8%AE%BE%E8%AE%A1type"><span class="toc-number">4.2.</span> <span class="toc-text">设计class犹如设计type</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%81%E4%BB%A5%E4%BC%A0%E9%80%92%E4%B8%80%E4%B8%AAconst%E5%BC%95%E7%94%A8-pass-by-reference-to-const-%E6%9B%BF%E6%8D%A2%E4%BC%A0%E9%80%92%E5%80%BC-pass-by-value"><span class="toc-number">4.3.</span> <span class="toc-text">宁以传递一个const引用(pass-by-reference-to-const)替换传递值(pass-by-value)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BF%85%E9%A1%BB%E8%BF%94%E5%9B%9E%E5%AF%B9%E8%B1%A1%E6%97%B6%EF%BC%8C%E5%88%AB%E5%A6%84%E6%83%B3%E8%BF%94%E5%9B%9E%E5%85%B6%E5%BC%95%E7%94%A8"><span class="toc-number">4.4.</span> <span class="toc-text">必须返回对象时，别妄想返回其引用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B0%86%E6%88%90%E5%91%98%E5%8F%98%E9%87%8F%E5%A3%B0%E6%98%8E%E4%B8%BAprivate"><span class="toc-number">4.5.</span> <span class="toc-text">将成员变量声明为private</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%81%E4%BB%A5non-member%E3%80%81non-friend%E6%9B%BF%E6%8D%A2member%E5%87%BD%E6%95%B0"><span class="toc-number">4.6.</span> <span class="toc-text">宁以non-member、non-friend替换member函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%8B%A5%E6%89%80%E6%9C%89%E5%8F%82%E6%95%B0%E7%9A%86%E9%9C%80%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2%EF%BC%8C%E8%AF%B7%E4%B8%BA%E6%AD%A4%E9%87%87%E7%94%A8non-member%E5%87%BD%E6%95%B0"><span class="toc-number">4.7.</span> <span class="toc-text">若所有参数皆需类型转换，请为此采用non-member函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%80%83%E8%99%91%E5%86%99%E5%87%BA%E4%B8%80%E4%B8%AA%E4%B8%8D%E6%8A%9B%E5%BC%82%E5%B8%B8%E7%9A%84swap%E5%87%BD%E6%95%B0"><span class="toc-number">4.8.</span> <span class="toc-text">考虑写出一个不抛异常的swap函数</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AE%9E%E7%8E%B0"><span class="toc-number">5.</span> <span class="toc-text">实现</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B0%BD%E5%8F%AF%E8%83%BD%E5%BB%B6%E5%90%8E%E5%8F%98%E9%87%8F%E5%AE%9A%E4%B9%89%E5%BC%8F%E7%9A%84%E5%87%BA%E7%8E%B0%E6%97%B6%E9%97%B4"><span class="toc-number">5.1.</span> <span class="toc-text">尽可能延后变量定义式的出现时间</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B0%BD%E9%87%8F%E5%B0%91%E5%81%9A%E8%BD%AC%E5%9E%8B%E5%8A%A8%E4%BD%9C"><span class="toc-number">5.2.</span> <span class="toc-text">尽量少做转型动作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%81%BF%E5%85%8D%E8%BF%94%E5%9B%9Ehandles%E6%8C%87%E5%90%91%E5%AF%B9%E8%B1%A1%E5%86%85%E9%83%A8%E6%88%90%E5%88%86"><span class="toc-number">5.3.</span> <span class="toc-text">避免返回handles指向对象内部成分</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BA%E2%80%9C%E5%BC%82%E5%B8%B8%E5%AE%89%E5%85%A8%E2%80%9D%E8%80%8C%E5%8A%AA%E5%8A%9B%E6%98%AF%E5%80%BC%E5%BE%97%E7%9A%84"><span class="toc-number">5.4.</span> <span class="toc-text">为“异常安全”而努力是值得的</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%80%8F%E5%BD%BB%E4%BA%86%E8%A7%A3inlining%E7%9A%84%E9%87%8C%E9%87%8C%E5%A4%96%E5%A4%96"><span class="toc-number">5.5.</span> <span class="toc-text">透彻了解inlining的里里外外</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B0%86%E6%96%87%E4%BB%B6%E9%97%B4%E7%9A%84%E7%BC%96%E8%AF%91%E4%BE%9D%E5%AD%98%E5%85%B3%E7%B3%BB%E9%99%8D%E8%87%B3%E6%9C%80%E4%BD%8E"><span class="toc-number">5.6.</span> <span class="toc-text">将文件间的编译依存关系降至最低</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%BB%A7%E6%89%BF%E4%B8%8E%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%AE%BE%E8%AE%A1"><span class="toc-number">6.</span> <span class="toc-text">继承与面向对象设计</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A1%AE%E5%AE%9A%E4%BD%A0%E7%9A%84public%E7%BB%A7%E6%89%BF%E5%A1%91%E6%A8%A1%E5%87%BAis-a%E5%85%B3%E7%B3%BB"><span class="toc-number">6.1.</span> <span class="toc-text">确定你的public继承塑模出is-a关系</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%81%BF%E5%85%8D%E9%81%AE%E6%8E%A9%E7%BB%A7%E6%89%BF%E8%80%8C%E6%9D%A5%E7%9A%84%E5%90%8D%E7%A7%B0"><span class="toc-number">6.2.</span> <span class="toc-text">避免遮掩继承而来的名称</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8C%BA%E5%88%86%E6%8E%A5%E5%8F%A3%E7%BB%A7%E6%89%BF%E5%92%8C%E5%AE%9E%E7%8E%B0%E7%BB%A7%E6%89%BF"><span class="toc-number">6.3.</span> <span class="toc-text">区分接口继承和实现继承</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%80%83%E8%99%91virtual%E5%87%BD%E6%95%B0%E4%BB%A5%E5%A4%96%E7%9A%84%E5%85%B6%E4%BB%96%E9%80%89%E6%8B%A9"><span class="toc-number">6.4.</span> <span class="toc-text">考虑virtual函数以外的其他选择</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%9D%E4%B8%8D%E9%87%8D%E6%96%B0%E5%AE%9A%E4%B9%89%E7%BB%A7%E6%89%BF%E8%80%8C%E6%9D%A5%E7%9A%84non-virtual%E5%87%BD%E6%95%B0"><span class="toc-number">6.5.</span> <span class="toc-text">绝不重新定义继承而来的non-virtual函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%9D%E4%B8%8D%E9%87%8D%E6%96%B0%E5%AE%9A%E4%B9%89%E7%BB%A7%E6%89%BF%E8%80%8C%E6%9D%A5%E7%9A%84%E7%BC%BA%E7%9C%81%E5%8F%82%E6%95%B0%E5%80%BC"><span class="toc-number">6.6.</span> <span class="toc-text">绝不重新定义继承而来的缺省参数值</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%80%9A%E8%BF%87%E5%A4%8D%E5%90%88%E5%A1%91%E8%86%9C%E5%87%BAhas-a%E6%88%96%E2%80%9C%E6%A0%B9%E6%8D%AE%E6%9F%90%E7%89%A9%E5%AE%9E%E7%8E%B0%E5%87%BA%E2%80%9D"><span class="toc-number">6.7.</span> <span class="toc-text">通过复合塑膜出has-a或“根据某物实现出”</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%98%8E%E6%99%BA%E8%80%8C%E5%AE%A1%E6%85%8E%E5%9C%B0%E4%BD%BF%E7%94%A8private%E7%BB%A7%E6%89%BF"><span class="toc-number">6.8.</span> <span class="toc-text">明智而审慎地使用private继承</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%98%8E%E6%99%BA%E8%80%8C%E5%AE%A1%E6%85%8E%E5%9C%B0%E4%BD%BF%E7%94%A8%E5%A4%9A%E9%87%8D%E7%BB%A7%E6%89%BF"><span class="toc-number">6.9.</span> <span class="toc-text">明智而审慎地使用多重继承</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%A8%A1%E6%9D%BF%E4%B8%8E%E6%B3%9B%E5%9E%8B%E7%BC%96%E7%A8%8B"><span class="toc-number">7.</span> <span class="toc-text">模板与泛型编程</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%86%E8%A7%A3%E9%9A%90%E5%BC%8F%E6%8E%A5%E5%8F%A3%E5%92%8C%E7%BC%96%E8%AF%91%E5%99%A8%E5%A4%9A%E6%80%81"><span class="toc-number">7.1.</span> <span class="toc-text">了解隐式接口和编译器多态</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%86%E8%A7%A3typename%E7%9A%84%E5%8F%8C%E9%87%8D%E6%84%8F%E4%B9%89"><span class="toc-number">7.2.</span> <span class="toc-text">了解typename的双重意义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AD%A6%E4%B9%A0%E5%A4%84%E7%90%86%E6%A8%A1%E6%9D%BF%E5%8C%96%E5%9F%BA%E7%B1%BB%E5%86%85%E7%9A%84%E5%90%8D%E7%A7%B0"><span class="toc-number">7.3.</span> <span class="toc-text">学习处理模板化基类内的名称</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B0%86%E4%B8%8E%E5%8F%82%E6%95%B0%E6%97%A0%E5%85%B3%E7%9A%84%E4%BB%A3%E7%A0%81%E6%8A%BD%E7%A6%BBtemplates"><span class="toc-number">7.4.</span> <span class="toc-text">将与参数无关的代码抽离templates</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%90%E7%94%A8%E6%88%90%E5%91%98%E5%87%BD%E6%95%B0%E6%A8%A1%E6%9D%BF%E6%8E%A5%E5%8F%97%E6%89%80%E6%9C%89%E5%85%BC%E5%AE%B9%E7%B1%BB%E5%9E%8B"><span class="toc-number">7.5.</span> <span class="toc-text">运用成员函数模板接受所有兼容类型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9C%80%E8%A6%81%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2%E6%97%B6%E8%AF%B7%E4%B8%BA%E6%A8%A1%E6%9D%BF%E5%AE%9A%E4%B9%89%E9%9D%9E%E6%88%90%E5%91%98%E5%87%BD%E6%95%B0"><span class="toc-number">7.6.</span> <span class="toc-text">需要类型转换时请为模板定义非成员函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AF%B7%E4%BD%BF%E7%94%A8traits-classes%E8%A1%A8%E7%8E%B0%E7%B1%BB%E5%9E%8B%E4%BF%A1%E6%81%AF"><span class="toc-number">7.7.</span> <span class="toc-text">请使用traits classes表现类型信息</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%A4%E8%AF%86template%E5%85%83%E7%BC%96%E7%A8%8B"><span class="toc-number">7.8.</span> <span class="toc-text">认识template元编程</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AE%9A%E5%88%B6new%E5%92%8Cdelete"><span class="toc-number">8.</span> <span class="toc-text">定制new和delete</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%86%E8%A7%A3new-handler%E8%A1%8C%E4%B8%BA"><span class="toc-number">8.1.</span> <span class="toc-text">了解new-handler行为</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%86%E8%A7%A3new%E5%92%8Cdelete%E7%9A%84%E5%90%88%E7%90%86%E6%9B%BF%E6%8D%A2%E6%97%B6%E6%9C%BA"><span class="toc-number">8.2.</span> <span class="toc-text">了解new和delete的合理替换时机</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BC%96%E5%86%99new%E5%92%8Cdelete%E6%97%B6%E9%9C%80%E5%9B%BA%E5%AE%88%E5%B8%B8%E8%A7%84"><span class="toc-number">8.3.</span> <span class="toc-text">编写new和delete时需固守常规</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%99%E4%BA%86placement-new%E4%B9%9F%E8%A6%81%E5%86%99placement-delete"><span class="toc-number">8.4.</span> <span class="toc-text">写了placement new也要写placement delete</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9D%82%E9%A1%B9%E8%AE%A8%E8%AE%BA"><span class="toc-number">9.</span> <span class="toc-text">杂项讨论</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%8D%E8%A6%81%E8%BD%BB%E5%BF%BD%E7%BC%96%E8%AF%91%E5%99%A8%E7%9A%84%E8%AD%A6%E5%91%8A"><span class="toc-number">9.1.</span> <span class="toc-text">不要轻忽编译器的警告</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2021/06/28/C++%20%E4%B8%AD%E7%9A%84%E5%A3%B0%E6%98%8E%E4%B8%8E%E5%AE%9A%E4%B9%89/" title="C++ 中的声明与定义"><img src="https://z3.ax1x.com/2021/06/28/Rt0puT.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="C++ 中的声明与定义"/></a><div class="content"><a class="title" href="/2021/06/28/C++%20%E4%B8%AD%E7%9A%84%E5%A3%B0%E6%98%8E%E4%B8%8E%E5%AE%9A%E4%B9%89/" title="C++ 中的声明与定义">C++ 中的声明与定义</a><time datetime="2021-06-28T03:06:41.000Z" title="发表于 2021-06-28 11:06:41">2021-06-28</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/06/28/static%20%E7%9B%B8%E5%85%B3%E6%80%BB%E7%BB%93/" title="static 相关总结"><img src="https://z3.ax1x.com/2021/06/28/RtdGod.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="static 相关总结"/></a><div class="content"><a class="title" href="/2021/06/28/static%20%E7%9B%B8%E5%85%B3%E6%80%BB%E7%BB%93/" title="static 相关总结">static 相关总结</a><time datetime="2021-06-28T03:01:22.000Z" title="发表于 2021-06-28 11:01:22">2021-06-28</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/06/11/JSON%E5%BA%93%E5%AD%A6%E4%B9%A0%EF%BC%9A4.Unicode/" title="JSON库学习：4.Unicode"><img src="https://z3.ax1x.com/2021/06/11/2WxlxP.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="JSON库学习：4.Unicode"/></a><div class="content"><a class="title" href="/2021/06/11/JSON%E5%BA%93%E5%AD%A6%E4%B9%A0%EF%BC%9A4.Unicode/" title="JSON库学习：4.Unicode">JSON库学习：4.Unicode</a><time datetime="2021-06-11T04:34:06.000Z" title="发表于 2021-06-11 12:34:06">2021-06-11</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/06/06/JSON%E5%BA%93%E5%AD%A6%E4%B9%A0%EF%BC%9A3-%E8%A7%A3%E6%9E%90%E5%AD%97%E7%AC%A6%E4%B8%B2/" title="JSON库学习：3-解析字符串"><img src="https://z3.ax1x.com/2021/06/11/2WxVbD.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="JSON库学习：3-解析字符串"/></a><div class="content"><a class="title" href="/2021/06/06/JSON%E5%BA%93%E5%AD%A6%E4%B9%A0%EF%BC%9A3-%E8%A7%A3%E6%9E%90%E5%AD%97%E7%AC%A6%E4%B8%B2/" title="JSON库学习：3-解析字符串">JSON库学习：3-解析字符串</a><time datetime="2021-06-06T15:48:10.000Z" title="发表于 2021-06-06 23:48:10">2021-06-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/05/30/JSON%E5%BA%93%E5%AD%A6%E4%B9%A0%EF%BC%9A2-%E8%A7%A3%E6%9E%90%E6%95%B0%E5%AD%97/" title="JSON库学习：2.解析数字"><img src="https://z3.ax1x.com/2021/06/11/2WxP81.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="JSON库学习：2.解析数字"/></a><div class="content"><a class="title" href="/2021/05/30/JSON%E5%BA%93%E5%AD%A6%E4%B9%A0%EF%BC%9A2-%E8%A7%A3%E6%9E%90%E6%95%B0%E5%AD%97/" title="JSON库学习：2.解析数字">JSON库学习：2.解析数字</a><time datetime="2021-05-30T14:08:08.000Z" title="发表于 2021-05-30 22:08:08">2021-05-30</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('https://z3.ax1x.com/2021/06/11/2WvzE4.jpg')"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2021 By Leroy</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="font-plus" type="button" title="放大字体"><i class="fas fa-plus"></i></button><button id="font-minus" type="button" title="缩小字体"><i class="fas fa-minus"></i></button><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script>function panguFn () {
+  if (typeof pangu === 'object') pangu.autoSpacingPage()
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/pangu/dist/browser/pangu.min.js')
+      .then(() => {
+        pangu.autoSpacingPage()
+      })
+  }
+}
+
+function panguInit () {
+  if (true){
+    GLOBAL_CONFIG_SITE.isPost && panguFn()
+  } else {
+    panguFn()
+  }
+}
+
+document.addEventListener('DOMContentLoaded', panguInit)</script><script src="/js/search/local-search.js"></script><div class="js-pjax"><script>function loadValine () {
+  function initValine () {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: 'LDAzKBPlQoXek5H1uxW4c0KM-gzGzoHsz',
+      appKey: '82wFug58yQXuRALowh69s5zT',
+      placeholder: 'Please leave your footprints',
+      avatar: 'monsterid',
+      meta: 'nick,mail,link'.split(','),
+      pageSize: '10',
+      lang: 'zh-CN',
+      recordIP: false,
+      serverURLs: '',
+      emojiCDN: '',
+      emojiMaps: "",
+      enableQQ: false,
+      path: window.location.pathname,
+      requiredFields: ["nick,mail"],
+      visitor: false
+    }, null))
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js').then(initValine)
+}
+
+if ('Valine' === 'Valine' || !false) {
+  if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
+  else setTimeout(loadValine, 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script></div><script id="click-heart" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/click-heart.min.js" async="async" mobile="false"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
